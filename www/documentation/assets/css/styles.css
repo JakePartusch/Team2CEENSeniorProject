@@ -1,0 +1,266 @@
+body {
+	font-size:13px;
+	font-family: Arial, sans-serif;
+	margin:0;
+	background-color: #efefef;
+	padding: 0px;
+	background-image: url(../images/bg-texture.gif);
+	background-repeat: repeat;
+	background-attachment: fixed;
+	line-height: 18px;
+}
+.clear {
+    clear: both;
+    display: block;
+    font-size: 0;
+    height: 0;
+    line-height: 0;
+    width: 100%;
+}
+.clear {clear: both;}
+h1,h2,h3,h4,h5,h6 {
+	color:#4e4f4f;
+	font-weight:bold;
+	margin: 0px;
+	padding: 0px;
+	line-height: 32px;
+	text-shadow:0 1px 0 #fff;
+}
+h1 {
+	font-size:30px;
+}
+h2 {
+	font-size:25px;
+}
+h3 {
+	font-size:18px;
+	line-height:27px;
+}
+h4 {
+	font-size:15px;
+}
+p {
+	margin-bottom: 15px;
+}
+a {
+	color: #85C441;
+	text-decoration: none;
+	outline:none;
+}
+a:hover {
+	color:#7cc0cb;
+}
+a.anchor {
+	text-decoration: none;
+	text-indent: -999px;
+	display: block;
+	height: 100px;
+}
+a img {
+	border-top-style: none;
+	border-right-style: none;
+	border-bottom-style: none;
+	border-left-style: none;
+}
+#container {
+	width: 900px;
+	margin-right: auto;
+	margin-left: auto;
+	background: url(../images/container-bg.jpg) repeat-x left top;
+	background-color: #f8f8f8;
+	color: #666666;
+	-moz-border-radius: 3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	-webkit-box-shadow: 0 0 4px #dadada;
+    -moz-box-shadow: 0 0 4px #dadada;
+	box-shadow: 0 0 4px #dadada;
+	margin-bottom: 35px;
+	border: 1px solid #FFFFFF;
+	padding: 30px;
+}
+.nav {
+	float:left;
+	width:900px;
+	display: block;
+	margin-bottom: 30px;
+	text-transform: uppercase;
+}
+.note {
+	width: auto;
+	-moz-border-radius: 3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	background: url(../images/note-bg.png) no-repeat 15px center #ffd7d8;
+	border: 1px solid #f9bac7;
+	margin: 15px 0;
+	overflow: hidden;
+	padding: 20px;
+	padding-left: 70px;
+	color: #d54d4d;
+}
+.note a {
+	color: #d54d4d;
+	border-bottom: 1px dotted #d54d4d;
+}
+#intro-holder {
+	width:100%;
+	margin-bottom: 25px;
+}
+.intro {
+	margin-left:auto;
+	margin-right:auto;
+	overflow:hidden;
+	width:960px;
+}
+.intro .blurb {
+	display:block;
+	float:left;
+	padding-left: 25px;
+	padding-top: 15px;
+}
+#logo {
+	float: left;
+}
+#logo a {
+	border: none;
+	display: block;
+}
+/***************************************************
+			DROPDOWN MENU
+***************************************************/
+#primary-menu {
+	z-index: 999;
+	float: left;
+	width: 100%;
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	background: #444;
+	height: 43px;
+	padding-bottom: 25px;
+	-moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+	border-bottom: 1px solid #FFFFFF;
+}
+.menu, .menu * {
+}
+.menu {
+	width: 960px;
+	padding: 0;
+	margin: 0 auto;
+	list-style-type: none;
+}
+.menu ul {
+	position: absolute;
+	top: -999em;
+	width: 190px; /* left offset of submenus need to match (see below) */
+}
+.menu ul li {
+	width: 100%;
+}
+.menu li:hover, .menu li.current {
+	visibility: inherit; /* fixes IE7 'sticky bug' */
+}
+.menu li {
+	float: left;
+	position: relative;
+	padding-bottom: 20px;
+	display: inline;
+}
+.menu li a {
+	display: block;
+	position: relative;
+	font-size: 11px;
+	text-transform: uppercase;
+	color: #AEAEAE;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	padding: 25px 29px 25px 0;
+	text-shadow:0 1px 0 #333;
+	float: left;
+}
+.menu li a.home {
+	background: url(../images/home-bg.png) no-repeat left 25px;
+	text-indent: -999px;
+	height: 18px;
+	width: 18px;
+	padding-right: 20px;
+}
+.menu li a:last-child {
+	border-right: none;
+}
+.menu li:hover a, .menu li.current a {	
+	color: #fff;
+}
+.menu li:hover ul {
+	left: -20px;
+	top: 68px; /* match top ul list item height */
+	z-index: 9999;
+	background: #444;
+	-moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+	-moz-border-radius-bottomleft:2px; 
+	-moz-border-radius-bottomright:2px;
+	-webkit-border-bottom-right-radius:2px;
+	-webkit-border-bottom-left-radius:2px;
+	border-bottom-right-radius:2px;
+	border-bottom-left-radius:2px;
+	margin: 0px;
+	padding: 0px;
+}
+.menu li:hover ul li a {
+	border-bottom: dotted 1px #555;
+	padding-right: 0px;
+	margin-right: 0px;
+}	
+.menu li:hover ul li {
+	padding-bottom: 0px;
+}
+.menu li ul li a {
+	font-size: 11px;
+	text-transform: uppercase;
+	padding: 12px 0;
+	margin: 0 18px;
+	width: 150px; /* match ul width */
+	height: auto;
+}
+.menu li ul li a { color: #AEAEAE !important; }
+.menu li ul li:hover a { color: #fff !important; }
+/*--------------------------------------------------
+			TOGGLE
+---------------------------------------------------*/
+.toggle-wrap {
+	float: left;
+	width: 100%;
+	margin-bottom: 6px;
+}
+.trigger {
+}
+.trigger a {
+	display: block;
+	padding: 10px;
+	padding-left: 15px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #676767;
+	-moz-border-radius: 3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	background: url(../images/bullet-toggle.png) no-repeat right 15px #EEEEEE;
+	border: 1px solid #DDD;
+}
+.trigger.active a { 
+	background: url(../images/bullet-toggle.png) no-repeat right -20px #EEEEEE;
+}
+.toggle-container {
+	overflow: hidden;
+	float: left;
+	margin-bottom: 50px;
+	padding-top: 15px;
+	padding-right: 0;
+	padding-bottom: 15px;
+	padding-left: 0;
+}
