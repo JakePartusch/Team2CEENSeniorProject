@@ -17,7 +17,7 @@ CSS overview:
 				RESET
 ---------------------------------------------------*/
 #inner-content {
-	width: 700px;
+	width: 900px;
 	float: left;
 }
 #sidebar {
@@ -127,7 +127,7 @@ CSS overview:
 			POST CONTENT
 ---------------------------------------------------*/
 .blog1 .post-content {
-	width: 600px;
+	width: 900px;
 	float: left;
 }
 .blog3 .post-media {

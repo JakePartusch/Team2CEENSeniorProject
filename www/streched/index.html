@@ -8,24 +8,12 @@
 
 <link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/blog.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="css/socialize-bookmarks.css" media="screen" />
 <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css' />
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
 <script type="text/javascript" src="javascript/custom.js"></script>
 <script type="text/javascript" src="javascript/header.js"></script>
-<script type="text/javascript" src="javascript/twitter.js"></script>
-
-<!-- PrettyPhoto --> 
-<link rel="stylesheet" href="css/prettyPhoto.css" type="text/css" media="screen" />
-<script type="text/javascript" src="javascript/prettyPhoto.js"></script>	
-
-<!-- Photostream Javascript --> 
-<script type="text/javascript" src="javascript/bra.photostream.js"></script>
-
-<!-- Flexslider JavaScript Files -->	
-<script type="text/javascript" src="javascript/jquery.flexslider.js"></script>
-<link rel="stylesheet" href="css/flexslider.css" type="text/css" media="screen" />	
+	
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
@@ -40,8 +28,13 @@
         ]);
 
         var options = {
-          title: 'Attenuation Data'
+          title: 'Attenuation Data',
+		  axisTitlesPosition: 'in'
         };
+		var vAxis = {
+		minValue: 0,
+		maxValue: 150
+		};
 
         var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
         chart.draw(data, options);
@@ -50,106 +43,61 @@
 </head>
 
 <body id="top">					
-
 <!-- START HEADER -->
-
 <div id="header-wrapper">
-
 	<div class="header clear">
-		
 		<div id="logo">	
 			<a href="index.html"><img src="images/logo.jpg" alt="" /></a>		
 		</div><!--END LOGO-->
-	
 		<div id="primary-menu">
-			
 			<ul class="menu">
 				<li><a href="index.html">Home</a>		
 					<ul>
 						<li><a href="index.html">Home</a></li>
 					</ul>
 			   </li>
-
-			</ul><!--END UL-->
-			
+			</ul>
 		</div><!--END PRIMARY MENU-->
-		
 	</div><!--END HEADER-->	
-	
 </div><!--END HEADER-WRAPPER-->		
-
 <!-- END HEADER -->
-
-
 <div id="wrapper">	
-
 <!-- START BLOG -->
-
 <div class="content-wrapper clear">
-
 	<div class="section-title">
-	
-		<h1 class="title">Home<span>Radio Frequency Data</span></h1>
-						
+		<h1 class="title">Radio Frequency Data</h1>				
 	</div><!--END SECTION TITLE-->
-		
 		<div id="inner-content" class="blog1">
-		
 			<div class="post">
-			
 				<div class="post-info">						
 					<div class="date"><span class="month">Jan</span><span class="day">16</span><span class="month">2014</span></div>						
 				</div><!--END POST-INFO-->		
-				
 				<div class="post-content">	
-
-				
 					<div class="post-title">				
 						<h2 class="title"><a href="blog-single.html">Current Data</a></h2>
 					</div><!--END POST-TITLE-->
-				
 					<div class="post-meta">				
 						<ul>
 							<li><span>Posted by</span> <a href="#">RF Monitoring System</a></li>
 						</ul>
 					</div><!--END POST-META-->		
 					<div id="chart_div" style="width: 900px; height: 500px;"></div>
-
 				</div><!--END POST-CONTENT -->
-				
 			</div><!--END POST-->
-		
 		</div><!--END INNER-CONTENT-->
-	
 </div><!--END CONTENT-WRAPPER--> 
-
 <!-- END BLOG -->
-
 </div><!--END WRAPPER--> 
-
-
-
-
-
 <!-- START FOOTER -->
-
 <div id="footer">
-
-	<div id="footer-content">
-				
-		<div id="footer-bottom" class="clear">
-						
+	<div id="footer-content">		
+		<div id="footer-bottom" class="clear">			
 			<div class="one-half">
 				<p>Team 2: Jake, Tyler, Kossivi</p>
 			</div><!--END ONE-HALF-->	
-			
 		</div><!--END FOOTER-BOTTOM-->	
-			
 	</div><!--END FOOTER-CONTENT-->	
-		
 </div><!--END FOOTER-->
-
-<!-- END FOOTER -->
 
 </body>
 </html>
