@@ -51,60 +51,103 @@ $(function () {
             series: [{
                
 				<?php
-					$mysqli = new mysqli("localhost", "jpartusch", "password", "mysql");
-					$allRecords;
-					/* check connection */
-					if ($mysqli->connect_errno) {
-						printf("Connect failed: %s\n", $mysqli->connect_error);
-						exit();
-					}
-					/* Select queries return a resultset */
-					if ($result = $mysqli->query($sql = "SELECT * FROM `attenuationdata` where receiverId = '1'")) {
-						$allRecords = $result->fetch_all();
-						
-						$result->close();
-					}
-					echo "name: '2.4GHz',";
-					echo "data: [";
-					foreach ($allRecords as $record)
-					{
-						if($record[4] == "2.4")
-						{
+					//Removes Warnings and Imports necessary object classes
+					error_reporting(E_ERROR | E_PARSE);
+					set_include_path ( "./classes" );
+					spl_autoload_register ();
+
+					//TODO: make receiverId dynamic
+					$allRecords = queryData("SELECT * FROM `attenuationdata` where receiverId = '1'");
+					$frequencyArray = getFrequencies($allRecords);
+					printFrequencyLines($frequencyArray, $allRecords);
 							
-							$split = explode("-", $record[2]);
-							$year = intVal($split[0]);
-							$month = intVal($split[1]);
-							$split = explode(" ", $split[2]);
-							$day = intVal($split[0]);
-							$split = explode(":", $split[1]);
-							$hour = intVal($split[0]);
-							$minute = intVal($split[1]);
-							$second = intVal($split[2]);
-							$attenuation = intVal($record[1]);
-							echo '[Date.UTC('. $year . ','. $month . ','. $day. ','. $hour . ','. $minute . ','. $second . '),' . $attenuation . '],';
-						}
-						
-					}
-					echo ']';
-					echo '}, {';
-					echo "name: '900MHz',";
-					echo "data: [";
-					foreach ($allRecords as $record)
+					function printRecords($frequency, $allRecords)
 					{
-						if($record[4] == "900")
+						foreach ($allRecords as $record)
 						{
-							$split = explode("-", $record[2]);
-							$year = intVal($split[0]);
-							$month = intVal($split[1]);
-							$split = explode(" ", $split[2]);
-							$day = intVal($split[0]);
-							$split = explode(":", $split[1]);
-							$hour = intVal($split[0]);
-							$minute = intVal($split[1]);
-							$second = intVal($split[2]);
-							$attenuation = intVal($record[1]);
-							echo '[Date.UTC('. $year . ','. $month . ','. $day. ','. $hour . ','. $minute . ','. $second . '),' . $attenuation . '],';
+							if($record[4] == $frequency)
+							{
+								printRecord($record);
+							}
 						}
+					}
+					
+					function printDataSeparator()
+					{
+						echo ']';
+						echo '}, {';
+					}
+					
+					function printDataHeader($headerName)
+					{
+						echo "name: '". $headerName ."',";
+						echo "data: [";
+					}
+					
+					function printFrequencyLines($frequencyArray, $allRecords)
+					{
+						for($i = 0; $i < count($frequencyArray); $i++)
+						{
+							//First Entry does not need the data separator
+							if($i != 0)
+							{
+								printDataSeparator();
+							}
+							printDataHeader($frequencyArray[$i]);
+							printRecords($frequencyArray[$i], $allRecords);
+
+						}
+					}
+										
+					function getFrequencies($allRecords)
+					{
+						$frequencyArray;
+						$i = 0;
+						foreach($allRecords as $record)
+						{
+							if(!isRecordedFrequency($record[4], $frequencyArray))
+							{
+								$frequencyArray[$i] = $record[4];
+								$i++;
+							}
+						}
+						return $frequencyArray;
+					}
+					function isRecordedFrequency($frequency, $frequencyArray)
+					{
+						foreach($frequencyArray as $currentFrequency)
+						{
+							if($currentFrequency == $frequency)
+							{
+								return true;
+							}
+						}
+						return false;
+					}
+					function queryData($query)
+					{
+						$mysqli = new mysqli("localhost", "jpartusch", "password", "mysql");
+						/* check connection */
+						if ($mysqli->connect_errno) 
+						{
+							printf("Connect failed: %s\n", $mysqli->connect_error);
+							exit();
+						}
+						/* Select queries return a resultset */
+						if ($result = $mysqli->query($sql = $query)) 
+						{
+							return $result->fetch_all();
+							$result->close();
+						}
+					}
+					
+					function printRecord ($record)
+					{
+						$attenuationReading = new AttenuationReading();
+						$attenuationReading->setDateTime($record[2]);
+						$dateTime = $attenuationReading->getDateTime();
+						$attentuationReading->attenuation = intVal($record[1]);
+						echo '[Date.UTC('. $dateTime->year . ','. $dateTime->month . ','. $dateTime->day. ','. $dateTime->hour . ','. $dateTime->minute . ','. $dateTime->second . '),' . $attentuationReading->attenuation . '],';
 					}
 				?>
 				]
