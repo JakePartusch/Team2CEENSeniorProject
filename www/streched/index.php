@@ -49,11 +49,7 @@ $(function () {
             },
             
             series: [{
-                name: '2.4GHz',
-                // Define the data points. All series have a dummy year
-                // of 1970/71 in order to be compared on the same x axis. Note
-                // that in JavaScript, months start at 0 for January, 1 for February etc.
-                data: [
+               
 				<?php
 					$mysqli = new mysqli("localhost", "jpartusch", "password", "mysql");
 					$allRecords;
@@ -68,22 +64,50 @@ $(function () {
 						
 						$result->close();
 					}
+					echo "name: '2.4GHz',";
+					echo "data: [";
 					foreach ($allRecords as $record)
 					{
-						$split = explode("-", $record[2]);
-						$year = intVal($split[0]);
-						$month = intVal($split[1]);
-						$split = explode(" ", $split[2]);
-						$day = intVal($split[0]);
-						$split = explode(":", $split[1]);
-						$hour = intVal($split[0]);
-						$minute = intVal($split[1]);
-						$second = intVal($split[2]);
-						$attenuation = intVal($record[1]);
-						echo '[Date.UTC('. $year . ','. $month . ','. $day. ','. $minute . ','. $second . '),' . $attenuation . '],';
+						if($record[4] == "2.4")
+						{
+							
+							$split = explode("-", $record[2]);
+							$year = intVal($split[0]);
+							$month = intVal($split[1]);
+							$split = explode(" ", $split[2]);
+							$day = intVal($split[0]);
+							$split = explode(":", $split[1]);
+							$hour = intVal($split[0]);
+							$minute = intVal($split[1]);
+							$second = intVal($split[2]);
+							$attenuation = intVal($record[1]);
+							echo '[Date.UTC('. $year . ','. $month . ','. $day. ','. $hour . ','. $minute . ','. $second . '),' . $attenuation . '],';
+						}
+						
+					}
+					echo ']';
+					echo '}, {';
+					echo "name: '900MHz',";
+					echo "data: [";
+					foreach ($allRecords as $record)
+					{
+						if($record[4] == "900")
+						{
+							$split = explode("-", $record[2]);
+							$year = intVal($split[0]);
+							$month = intVal($split[1]);
+							$split = explode(" ", $split[2]);
+							$day = intVal($split[0]);
+							$split = explode(":", $split[1]);
+							$hour = intVal($split[0]);
+							$minute = intVal($split[1]);
+							$second = intVal($split[2]);
+							$attenuation = intVal($record[1]);
+							echo '[Date.UTC('. $year . ','. $month . ','. $day. ','. $hour . ','. $minute . ','. $second . '),' . $attenuation . '],';
+						}
 					}
 				?>
-                ]
+				]
 			}]	
         });
     });
