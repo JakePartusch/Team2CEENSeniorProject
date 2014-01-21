@@ -55,100 +55,21 @@ $(function () {
 					error_reporting(E_ERROR | E_PARSE);
 					set_include_path ( "./classes" );
 					spl_autoload_register ();
+					
+					$utils = new Utils();
 
 					//TODO: make receiverId dynamic
-					$allRecords = queryData("SELECT * FROM `attenuationdata` where receiverId = '1'");
-					$frequencyArray = getFrequencies($allRecords);
-					printFrequencyLines($frequencyArray, $allRecords);
-							
-					function printRecords($frequency, $allRecords)
+					if ( isset( $_GET['receiverId'] ) && !empty( $_GET['receiverId'] ) )
 					{
-						foreach ($allRecords as $record)
-						{
-							if($record[4] == $frequency)
-							{
-								printRecord($record);
-							}
-						}
+						$allRecords = $utils->queryData("SELECT * FROM `attenuationdata` where receiverId = '". $_GET['receiverId']."';");
 					}
+					else
+					{
+						$allRecords = $utils->queryData("SELECT * FROM `attenuationdata` where receiverId = '1';");
+					}
+					$frequencyArray = $utils->getFrequencies($allRecords);
+					$utils->printFrequencyLines($frequencyArray, $allRecords);
 					
-					function printDataSeparator()
-					{
-						echo ']';
-						echo '}, {';
-					}
-					
-					function printDataHeader($headerName)
-					{
-						echo "name: '". $headerName ."',";
-						echo "data: [";
-					}
-					
-					function printFrequencyLines($frequencyArray, $allRecords)
-					{
-						for($i = 0; $i < count($frequencyArray); $i++)
-						{
-							//First Entry does not need the data separator
-							if($i != 0)
-							{
-								printDataSeparator();
-							}
-							printDataHeader($frequencyArray[$i]);
-							printRecords($frequencyArray[$i], $allRecords);
-
-						}
-					}
-										
-					function getFrequencies($allRecords)
-					{
-						$frequencyArray;
-						$i = 0;
-						foreach($allRecords as $record)
-						{
-							if(!isRecordedFrequency($record[4], $frequencyArray))
-							{
-								$frequencyArray[$i] = $record[4];
-								$i++;
-							}
-						}
-						return $frequencyArray;
-					}
-					function isRecordedFrequency($frequency, $frequencyArray)
-					{
-						foreach($frequencyArray as $currentFrequency)
-						{
-							if($currentFrequency == $frequency)
-							{
-								return true;
-							}
-						}
-						return false;
-					}
-					function queryData($query)
-					{
-						$mysqli = new mysqli("localhost", "jpartusch", "password", "mysql");
-						/* check connection */
-						if ($mysqli->connect_errno) 
-						{
-							printf("Connect failed: %s\n", $mysqli->connect_error);
-							exit();
-						}
-						/* Select queries return a resultset */
-						if ($result = $mysqli->query($sql = $query)) 
-						{
-							return $result->fetch_all();
-							$result->close();
-						}
-					}
-					
-					function printRecord ($record)
-					{
-						$attenuationReading = new AttenuationReading();
-						$attenuationReading->setDateTime($record[2]);
-						$dateTime = $attenuationReading->getDateTime();
-						$attentuationReading->attenuation = intVal($record[1]);
-						echo '[Date.UTC('. $dateTime->year . ','. $dateTime->month . ','. $dateTime->day. ','. $dateTime->hour . ','. $dateTime->minute . ','. $dateTime->second . '),' . $attentuationReading->attenuation . '],';
-					}
 				?>
 				]
 			}]	
@@ -182,7 +103,7 @@ $(function () {
 <!-- START BLOG -->
 <div class="content-wrapper clear">
 	<div class="section-title">
-		<h1 class="title">Radio Frequency Data</h1>				
+		<h1 class="title">RF Monitoring System</h1>				
 	</div><!--END SECTION TITLE-->
 		<div id="inner-content" class="blog1">
 			<div class="post">
@@ -206,9 +127,28 @@ $(function () {
 							<li><span>Posted by</span> <a href="#">RF Monitoring System</a></li>
 						</ul>
 					</div><!--END POST-META-->	
-								
-					<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+					<form action="redirect.php" method="post">
+						<select name="select_receiverId">
+						<?php
+							$allRecords = $utils->queryData("SELECT * FROM `attenuationdata`");
+							$receiverIdArray = $utils->getReceiverIds($allRecords);
+							foreach($receiverIdArray as $receiverId)
+							{
+								if($receiverId == $_GET['receiverId'])
+								{
+									echo '<option value="'.$receiverId.'" selected>Receiver '.$receiverId.'</option>';
+								}
+								else
+								{
+									echo '<option value="'.$receiverId.'">Receiver '.$receiverId.'</option>';
+								}
+							}
+						?>
+						</select>
+						<input type="submit" />
+					</form>
 				</div><!--END POST-CONTENT -->
+				<div id="container" style="min-width: 310px; height: 100%; margin: 0 auto"></div>
 			</div><!--END POST-->
 		</div><!--END INNER-CONTENT-->
 </div><!--END CONTENT-WRAPPER--> 
@@ -219,7 +159,7 @@ $(function () {
 	<div id="footer-content">		
 		<div id="footer-bottom" class="clear">			
 			<div class="one-half">
-				<p>Team 2: Jake, Tyler, Kossivi</p>
+				<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons Attribution-NonCommercial 3.0 Unported License</a>.
 			</div><!--END ONE-HALF-->	
 		</div><!--END FOOTER-BOTTOM-->	
 	</div><!--END FOOTER-CONTENT-->	

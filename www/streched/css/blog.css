@@ -17,7 +17,7 @@ CSS overview:
 				RESET
 ---------------------------------------------------*/
 #inner-content {
-	width: 900px;
+	width: 100%;
 	float: left;
 }
 #sidebar {
@@ -413,9 +413,9 @@ ul.share li.twitter {
 
 /*---------------iPad portrait---------------*/
 @media only screen and (min-width: 768px) and (max-width: 959px) {
-#inner-content { width: 490px; }
+#inner-content { width: 100%; }
 #sidebar { width: 190px; }
-.blog1 .post-content, .blog5 .post-content, .blog6 .post-content, .blog5 .post-title, .blog5 .post-meta, .blog6 .post-title, .blog6 .post-meta { width: 390px; }
+.blog1 .post-content, .blog5 .post-content, .blog6 .post-content, .blog5 .post-title, .blog5 .post-meta, .blog6 .post-title, .blog6 .post-meta { width: 100%; }
 .blog3 .post-media { width: 150px; }
 .blog3 .post-content { width: 210px; }
 .comment .comment-wrap, .comment .comment-meta { width: 85.4%; }
@@ -428,9 +428,9 @@ ul.share li.twitter {
 
 /*---------------iPhone landscape---------------*/
 @media only screen and (min-width: 480px) and (max-width: 767px) {
-#inner-content, #sidebar { width: 420px; }
+#inner-content, #sidebar { width: 100%; }
 #inner-content { border-bottom: 1px solid #eee; margin: 0 0 40px 0; padding: 0 0 40px 0; }
-.blog1 .post-content, .blog5 .post-content, .blog6 .post-content, .blog5 .post-title, .blog5 .post-meta, .blog6 .post-title, .blog6 .post-meta { width: 320px; } 
+.blog1 .post-content, .blog5 .post-content, .blog6 .post-content, .blog5 .post-title, .blog5 .post-meta, .blog6 .post-title, .blog6 .post-meta { width: 100%; } 
 .blog3 .post-media { width: 320px; margin-right: 0; }
 .blog3 .post-content { width: 320px; float: right; margin-top: 20px; }
 .blog6 .post-content, .blog6 .post-title, .blog6 .post-meta { width: 320px; }
@@ -443,9 +443,9 @@ ul.share li.twitter {
 
 /*---------------iPhone portrait---------------*/
 @media only screen and (min-width: 320px) and (max-width: 479px) {
-#inner-content, #sidebar { width: 300px; }
+#inner-content, #sidebar { width: 100%; }
 #inner-content { border-bottom: 1px solid #eee; margin: 0 0 40px 0; padding: 0 0 40px 0; }
-.blog1 .post-content, .blog5 .post-content, .blog6 .post-content, .blog5 .post-title, .blog5 .post-meta, .blog6 .post-title, .blog6 .post-meta { width: 300px; } 
+.blog1 .post-content, .blog5 .post-content, .blog6 .post-content, .blog5 .post-title, .blog5 .post-meta, .blog6 .post-title, .blog6 .post-meta { width: 100%; } 
 .blog3 .post-media { margin-right: 0; }
 .blog3 .post-content { margin-top: 15px; }
 .blog6 .post-content, .blog6 .post-title, .blog6 .post-meta { width: 300px; }
