@@ -18,8 +18,9 @@
     <script type="text/javascript">
 
 $(function () {
-        $('#container').highcharts({
+        var options ={
             chart: {
+				renderTo: 'container',
                 type: 'spline'
             },
             title: {
@@ -48,33 +49,30 @@ $(function () {
                 }
             },
             
-            series: [{
-               
-				<?php
-					//Removes Warnings and Imports necessary object classes
-					error_reporting(E_ERROR | E_PARSE);
-					set_include_path ( "./classes" );
-					spl_autoload_register ();
-					
-					$utils = new Utils();
-
-					//TODO: make receiverId dynamic
-					if ( isset( $_GET['receiverId'] ) && !empty( $_GET['receiverId'] ) )
-					{
-						$allRecords = $utils->queryData("SELECT * FROM `attenuationdata` where receiverId = '". $_GET['receiverId']."';");
-					}
-					else
-					{
-						$allRecords = $utils->queryData("SELECT * FROM `attenuationdata` where receiverId = '1';");
-					}
-					$frequencyArray = $utils->getFrequencies($allRecords);
-					$utils->printFrequencyLines($frequencyArray, $allRecords);
-					
-				?>
-				]
-			}]	
-        });
+            series: [{},{}]
+        };
+		
+		$.getJSON('getData.php', function(data) {
+		var names = [];
+		var attenuationData = [];
+		 $.each( data, function( key, val ) {
+			names.push(key);
+			attenuationData.push(val);
+		 });
+		 var i = 0;
+		 $.each (names, function(key, val){
+			options.series[i].name = val;
+			i++
+		 });
+		 var i = 0;
+		 $.each (attenuationData, function(key, val){
+			options.series[i].data = val;
+			i++
+		 });
+        var chart = new Highcharts.Chart(options);
+		});
     });
+	
     </script>
 <script src="../../js/highcharts.js"></script>
 <script src="../../js/modules/exporting.js"></script>
@@ -102,9 +100,6 @@ $(function () {
 <div id="wrapper">	
 <!-- START BLOG -->
 <div class="content-wrapper clear">
-	<div class="section-title">
-		<h1 class="title">RF Monitoring System</h1>				
-	</div><!--END SECTION TITLE-->
 		<div id="inner-content" class="blog1">
 			<div class="post">
 				<div class="post-info">				
@@ -119,31 +114,39 @@ $(function () {
 				?>
 				</div><!--END POST-INFO-->		
 				<div class="post-content">	
-					<div class="post-title">				
-						<h2 class="title"><a href="blog-single.html">Current Data</a></h2>
+					<div class="post-title" style="margin-bottom:2%">				
+						<h2 class="title"><a href="blog-single.html">RF Monitoring System</a></h2>
 					</div><!--END POST-TITLE-->
-					<div class="post-meta">				
-						<ul>
-							<li><span>Posted by</span> <a href="#">RF Monitoring System</a></li>
-						</ul>
-					</div><!--END POST-META-->	
 					<form action="redirect.php" method="post">
 						<select name="select_receiverId">
 						<?php
+							/*error_reporting(E_ERROR | E_PARSE);
+							set_include_path ( "./classes" );
+							spl_autoload_register ();
+							$utils = new Utils();
 							$allRecords = $utils->queryData("SELECT * FROM `attenuationdata`");
 							$receiverIdArray = $utils->getReceiverIds($allRecords);
 							foreach($receiverIdArray as $receiverId)
 							{
+							echo $receiverId;
+							echo $_GET['receiverId'];
 								if($receiverId == $_GET['receiverId'])
 								{
+									
 									echo '<option value="'.$receiverId.'" selected>Receiver '.$receiverId.'</option>';
 								}
 								else
 								{
 									echo '<option value="'.$receiverId.'">Receiver '.$receiverId.'</option>';
 								}
-							}
+							}*/
 						?>
+						</select>
+						<select name= "select_range">
+							<option value="today">Today</option>
+							<option value="week">Week</option>
+							<option value="month">Month</option>
+							<option value="year">Year</option>
 						</select>
 						<input type="submit" />
 					</form>

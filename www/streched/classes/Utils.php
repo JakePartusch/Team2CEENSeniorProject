@@ -111,9 +111,26 @@ public function queryData($query)
 	/* Select queries return a resultset */
 	if ($result = $mysqli->query($sql = $query)) 
 	{
-		return $result->fetch_all();
+		$allRecords = $result->fetch_all();
+		$data = array();
+		foreach($allRecords as $record)
+		{
+			array_push($data, $this->createAttenuationObject($record));
+		}
 		$result->close();
+		return $data;
 	}
+}
+
+public function createAttenuationObject($record)
+{
+	$attenuationReading = new AttenuationReading();
+	$attenuationReading->utc = strtotime($record[2]);
+	$attenuationReading->attenuation = intVal($record[1]);
+	$attenuationReading->receiverId = $record[3];
+	$attenuationReading->frequency = $record[4];
+	return $attenuationReading;
+	
 }
 
 public function printRecord ($record)
