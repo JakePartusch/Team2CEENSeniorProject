@@ -2,13 +2,18 @@
 #define TEXT_COLOR 0xFFFF
 class Field
 {
+	private:
+	
 	public:
-		int xCoordinate;
-		int yCoordinate;
 		char *description;
+		char *value;
 		bool isSelected;
 		int selectedX;
 		int selectedY;
+		int valueX;
+		int valueY;
+		int xCoordinate;
+		int yCoordinate;
 		Field();
 		Field(char *description);
 };
@@ -28,16 +33,17 @@ class Screen
 		void drawFields();
 		void eraseFields();
 		void eraseTitle();
-	public:
 		char *title;
 		int xTitle;
 		int yTitle;
 		int titleSize;
-		Field *fields;
 		int fieldLength;
+	public:
+		Field *fields;
 		Screen(char *title, int fieldLength);
+		Screen();
+		void begin();
 		void drawScreen();
 		void moveSelectedDown();
-		void begin();
 		void clearScreen();
 };

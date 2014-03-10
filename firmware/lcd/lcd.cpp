@@ -1,71 +1,47 @@
 #include <avr/io.h>
-#define F_CPU 16000000UL
-#include <util/delay.h>
 #include "Adafruit_GFX.h"
 #include "Adafruit_ILI9340.h"
 #include "Screen.h"
+#include "lcd.h"
 
-Screen buildTransmitterScreen();
-Screen buildReceiverScreen();
-Screen buildHomeScreen();
-Screen buildMenuScreen();
-Field receiverFieldArray[4];
-Field transmitterFieldArray[4];
-Field menuFieldArray[4];
-Field homeFieldArray[3];
-
-int main(void)
+LCD::LCD()
 {
-	Screen receiverScreen = buildReceiverScreen();
-	Screen transmitterScreen = buildTransmitterScreen();
-	Screen menuScreen = buildMenuScreen();
-	Screen homeScreen = buildHomeScreen();
-	homeScreen.begin();
-	homeScreen.drawScreen();
-	_delay_ms(1000);
-	homeScreen.clearScreen();
-	menuScreen.drawScreen();
-	_delay_ms(1000);
-	menuScreen.clearScreen();
-	transmitterScreen.drawScreen();
-	_delay_ms(1000);
-	menuScreen.clearScreen();
-	receiverScreen.drawScreen();
-
+	Screen screen = Screen();
+	screen.begin();
 }
-Screen buildTransmitterScreen()
+Screen LCD::buildTransmitterScreen()
 {
-	transmitterFieldArray[1] = Field("Power");
-	transmitterFieldArray[2] = Field("Baud");
-	transmitterFieldArray[3] = Field("Back");
+	transmitterFields[1] = Field("Power");
+	transmitterFields[2] = Field("Baud");
+	transmitterFields[3] = Field("Back");
 	Screen screen = Screen("Transmitter", 4);
-	screen.fields = transmitterFieldArray;
+	screen.fields = transmitterFields;
 	return screen;
 }
-Screen buildReceiverScreen()
+Screen LCD::buildReceiverScreen()
 {
-	receiverFieldArray[1] = Field("Interval");
-	receiverFieldArray[2] = Field("Baud");
-	receiverFieldArray[3] = Field("Back");
+	receiverFields[1] = Field("Interval");
+	receiverFields[2] = Field("Baud");
+	receiverFields[3] = Field("Back");
 	Screen screen("Receiver", 4);
-	screen.fields = receiverFieldArray;
+	screen.fields = receiverFields;
 	return screen;
 }
 
-Screen buildMenuScreen()
+Screen LCD::buildMenuScreen()
 {
-	menuFieldArray[1] = Field("Transmitter");
-	menuFieldArray[2] = Field("Receiver");
-	menuFieldArray[3] = Field("Back");
+	menuFields[1] = Field("Transmitter");
+	menuFields[2] = Field("Receiver");
+	menuFields[3] = Field("Back");
 	Screen screen("Settings", 4);
-	screen.fields = menuFieldArray;
+	screen.fields = menuFields;
 	return screen;
 }
-Screen buildHomeScreen()
+Screen LCD::buildHomeScreen()
 {
-	homeFieldArray[1] = Field("Current");
-	homeFieldArray[2] = Field("Menu");
+	homeFields[1] = Field("Current");
+	homeFields[2] = Field("Menu");
 	Screen screen("HOME",3);
-	screen.fields = homeFieldArray;
+	screen.fields = homeFields;
 	return screen;
 }

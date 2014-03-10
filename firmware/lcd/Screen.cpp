@@ -22,6 +22,8 @@ Field::Field(char *description)
 	this->description = description;
 }
 
+Screen::Screen()
+{}
 Screen::Screen(char *title, int fieldLength)
 {
 	this->title = title;
