@@ -7,43 +7,64 @@
 #include <avr/io.h>
 #include <avr/eeprom.h>
 #include "EEProm.h"
-uint16_t EEMEM NonVolatileAttenuation;
-uint16_t EEMEM NonVolatileBaud;
-uint16_t EEMEM NonVolatilePower;
-uint16_t EEMEM NonvolatileId;
+#include "USART.h"
+uint16_t EEMEM NonVolatileAttenuation[10];
+uint16_t EEMEM NonVolatileBaud[10];
+uint16_t EEMEM NonVolatilePower[10];
+uint16_t EEMEM NonvolatileId[10];
 
 EEProm::EEProm()
 {}
 
-unsigned int EEProm::getBaud()
+void EEProm::getBaud(char baud[])
 {
-	return eeprom_read_word (&NonVolatileBaud);
+	uint8_t temp [10];
+	eeprom_read_block (( void *) temp , ( const void *) NonVolatileBaud , 10);
+	for (int i = 0 ; i < 10 ; ++i)
+	{
+		baud[i] = temp[i];
+	}
 }
-void EEProm::setBaud(uint16_t baud)
+void EEProm::setBaud(char *baud)
 {
-	eeprom_update_word(&NonVolatileBaud, baud);
+	eeprom_update_block (( const void *) baud , (void *)NonVolatileBaud, 10);
 }
-uint16_t EEProm::getAttenuation()
+void EEProm::getAttenuation(char attenuation[])
 {
-	return eeprom_read_word (&NonVolatileAttenuation);
+	uint8_t temp[10];
+	eeprom_read_block (( void *) temp , ( const void *) NonVolatileAttenuation , 10);
+	for (int i = 0 ; i < 10 ; ++i)
+	{
+		attenuation[i] = temp[i];
+	}
 }
-void EEProm::setAttenuation(uint16_t attenuation)
+void EEProm::setAttenuation(char *attenuation)
 {
-	eeprom_update_word(&NonVolatileAttenuation, attenuation);
+	eeprom_update_block (( const void *) attenuation , (void *)NonVolatileAttenuation, 10);
 }
-uint16_t EEProm::getPower()
+void EEProm::getPower(char power[])
 {
-	return eeprom_read_word (&NonVolatilePower);
+	uint8_t temp[10];
+	eeprom_read_block (( void *) temp , ( const void *) NonVolatilePower , 10);
+	for (int i = 0 ; i < 10 ; ++i)
+	{
+		power[i] = temp[i];
+	}
 }
-void EEProm::setPower(uint16_t power)
+void EEProm::setPower(char *power)
 {
-	eeprom_update_word(&NonVolatilePower, power);
+	eeprom_update_block (( const void *) power , (void *)NonVolatilePower, 10);
 }
-uint16_t EEProm::getId()
+void EEProm::getId(char id[])
 {
-	return eeprom_read_word(&NonvolatileId);
+	uint8_t temp[10];
+	eeprom_read_block (( void *) temp , ( const void *) NonvolatileId , 10);
+	for (int i = 0 ; i < 10 ; ++i)
+	{
+		id[i] = temp[i];
+	}
 }
-void EEProm::setId(uint16_t id)
+void EEProm::setId(char *id)
 {
-	eeprom_update_word(&NonvolatileId, id);
+	eeprom_update_block (( const void *) id , (void *)NonvolatileId, 10);
 }

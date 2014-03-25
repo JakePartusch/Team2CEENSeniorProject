@@ -3,13 +3,13 @@ class EEProm
 	private:
 	public:
 		EEProm();
-		uint16_t getBaud();
-		uint16_t getAttenuation();
-		uint16_t getPower();
-		uint16_t getId();
+		void getBaud(char baud[]);
+		void getAttenuation(char attenuation[]);
+		void getPower(char power[]);
+		void getId(char id[]);
 		
-		void setId(uint16_t id);
-		void setPower(uint16_t power);
-		void setAttenuation(uint16_t attenuation);
-		void setBaud(uint16_t baud);
+		void setId(char *id);
+		void setPower(char *power);
+		void setAttenuation(char *attenuation);
+		void setBaud(char *baud);
 };
