@@ -1,23 +1,6 @@
 #define BACKGROUND_COLOR 0x001F
 #define TEXT_COLOR 0xFFFF
-class Field
-{
-	private:
-	
-	public:
-		char *description;
-		char *value;
-		bool isSelected;
-		int selectedX;
-		int selectedY;
-		int valueX;
-		int valueY;
-		int xCoordinate;
-		int yCoordinate;
-		Field();
-		Field(char *description);
-};
-
+#include "Field.h"
 class Screen
 {
 	private:

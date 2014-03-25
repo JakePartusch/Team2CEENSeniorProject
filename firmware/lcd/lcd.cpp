@@ -1,13 +1,27 @@
 #include <avr/io.h>
 #include "Adafruit_GFX.h"
 #include "Adafruit_ILI9340.h"
-#include "Screen.h"
 #include "lcd.h"
 
-LCD::LCD()
+#define F_CPU 16000000UL
+#include <util/delay.h>
+
+LCD::LCD(EEProm eeProm)
 {
 	Screen screen = Screen();
+	this->eeProm = eeProm;
 	screen.begin();
+	init();
+}
+void LCD::init()
+{
+	this->receiverScreen = buildReceiverScreen();
+	this->transmitterScreen = buildTransmitterScreen();
+	this->menuScreen = buildMenuScreen();
+	this->homeScreen = buildHomeScreen();
+	
+	this->currentScreen = this->homeScreen;
+	homeScreen.drawScreen();
 }
 Screen LCD::buildTransmitterScreen()
 {
@@ -39,9 +53,10 @@ Screen LCD::buildMenuScreen()
 }
 Screen LCD::buildHomeScreen()
 {
-	homeFields[1] = Field("Current");
+	this->eeProm.getAttenuation(this->attenuation);
+	homeFields[1] = Field("Current", this->attenuation);
 	homeFields[2] = Field("Menu");
-	Screen screen("HOME",3);
+	Screen screen("HOME", 3);
 	screen.fields = homeFields;
 	return screen;
 }

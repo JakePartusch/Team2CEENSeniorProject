@@ -134,6 +134,18 @@
     <Compile Include="Adafruit_ILI9340.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="EEProm.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="EEProm.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Field.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Field.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="glcdfont.c">
       <SubType>compile</SubType>
     </Compile>

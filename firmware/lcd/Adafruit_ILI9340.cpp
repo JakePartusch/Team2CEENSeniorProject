@@ -24,7 +24,7 @@
 #define CLEARBITS(port,pin) ((port) &= (~(pin))) 
 #define SET_BIT(port,pin) SETBITS((port), (BIT((pin))))  
 #define CLEAR_BIT(port,pin) CLEARBITS((port), (BIT((pin)))) 
-#define port PORTA
+#define port PORTD
 #define SS 4
 #define MOSI 5
 #define MISO 6
@@ -114,10 +114,10 @@ void Adafruit_ILI9340::commandList(uint8_t *addr) {
 
 void Adafruit_ILI9340::begin(void) 
 {	
-	DDRA |= (1<<_rst);
+	DDRD|= (1<<_rst);
 	CLEAR_BIT(port, _rst);
-	DDRA |= (1<<_dc);
-	DDRA |= (1<<_cs);
+	DDRD |= (1<<_dc);
+	DDRD |= (1<<_cs);
 	
 	DDRB = (1<<MOSI) | (1<<SCK) | (1<<SS);
 	SPCR = (1<<SPE) | (1<<MSTR) | (1<<SPR0);

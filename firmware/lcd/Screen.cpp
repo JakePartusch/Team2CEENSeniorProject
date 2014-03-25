@@ -5,22 +5,16 @@
 #include "Adafruit_GFX.h"
 #include "Adafruit_ILI9340.h"
 
-#define _cs 0
-#define _dc 2
-#define _rst 1
+#define _cs 7
+#define _dc 5
+#define _rst 6
 Adafruit_ILI9340 tft = Adafruit_ILI9340(_cs, _dc, _rst);
 
 #define min(a,b) \
 ({ __typeof__ (a) _a = (a); \
 	__typeof__ (b) _b = (b); \
 _a < _b ? _a : _b; })
-Field::Field()
-{}
 
-Field::Field(char *description)
-{
-	this->description = description;
-}
 
 Screen::Screen()
 {}
@@ -76,7 +70,13 @@ void Screen::drawFields()
 		{
 			selectField(i);
 		}
-		printText(this->fields[i].description, 3, this->fields[i].xCoordinate, this->fields[i].yCoordinate);
+		char str[80];
+		str[0] = 0; 
+		strcat (str, this->fields[i].description);
+		strcat (str, " ");
+		strcat (str, this->fields[i].value);
+		
+		printText(str, 3, this->fields[i].xCoordinate, this->fields[i].yCoordinate);
 	}
 }
 

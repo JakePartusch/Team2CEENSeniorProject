@@ -1,14 +1,24 @@
+#include "Screen.h"
+#include "../EEProm/EEProm/EEProm.h"
 class LCD
 {
 	private:
-		Field receiverFields[4];
-		Field transmitterFields[4];
-		Field menuFields[4];
-		Field homeFields[3];
-	public:
 		Screen buildTransmitterScreen();
 		Screen buildReceiverScreen();
 		Screen buildHomeScreen();
 		Screen buildMenuScreen();
-		LCD();
+		Field receiverFields[4];
+		Field transmitterFields[4];
+		Field menuFields[4];
+		Field homeFields[3];
+		Screen homeScreen;
+		Screen menuScreen;
+		Screen receiverScreen;
+		Screen transmitterScreen;
+		EEProm eeProm;
+		char attenuation[10];
+	public:
+		LCD(EEProm eeProm);
+		void init();
+		Screen currentScreen;
 };
