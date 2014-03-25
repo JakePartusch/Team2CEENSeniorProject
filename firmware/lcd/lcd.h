@@ -17,8 +17,9 @@ class LCD
 		Screen transmitterScreen;
 		EEProm eeProm;
 		char attenuation[10];
+		void init();
 	public:
 		LCD(EEProm eeProm);
-		void init();
 		Screen currentScreen;
+		void refresh();
 };

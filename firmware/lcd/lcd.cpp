@@ -13,6 +13,13 @@ LCD::LCD(EEProm eeProm)
 	screen.begin();
 	init();
 }
+void LCD::refresh()
+{
+	this->currentScreen.clearScreen();
+	this->homeScreen = buildHomeScreen();
+	this->currentScreen = this->homeScreen;
+	this->currentScreen.drawScreen();
+}
 void LCD::init()
 {
 	this->receiverScreen = buildReceiverScreen();
@@ -21,7 +28,7 @@ void LCD::init()
 	this->homeScreen = buildHomeScreen();
 	
 	this->currentScreen = this->homeScreen;
-	homeScreen.drawScreen();
+	this->currentScreen.drawScreen();
 }
 Screen LCD::buildTransmitterScreen()
 {
