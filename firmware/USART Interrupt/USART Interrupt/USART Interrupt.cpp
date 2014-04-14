@@ -4,10 +4,10 @@
 #define F_CPU 16000000UL
 #include <util/delay.h>
 
-USART usart = USART(0, 103);
+USART usart = USART(1, 103);
 int main(void)
 {
-	UCSR0B |= (1 << RXCIE0 );
+	UCSR1B |= (1 << RXCIE1 );
 	sei ();
     while(1)
     {
@@ -16,9 +16,9 @@ int main(void)
     }
 }
 
-ISR (USART0_RX_vect)
+ISR (USART1_RX_vect)
 {
 	char ReceivedByte ;
-	ReceivedByte = UDR0; // Fetch the received byte value into the variable " ByteReceived "
+	ReceivedByte = UDR1; // Fetch the received byte value into the variable " ByteReceived "
 	usart.transmit(ReceivedByte);
 }
