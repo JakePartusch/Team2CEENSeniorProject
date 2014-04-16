@@ -1,8 +1,5 @@
 ﻿#include <avr/io.h>
-#include <string.h>
-#include <stdio.h>
 #include "USART.h"
-#define F_CPU 16000000UL
 
 USART::USART() {	
 }

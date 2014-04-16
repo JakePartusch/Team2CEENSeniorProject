@@ -135,10 +135,22 @@
     <Compile Include="RS232Test.cpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Timer.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Timer.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="USART.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="USART.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Watchdog.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Watchdog.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

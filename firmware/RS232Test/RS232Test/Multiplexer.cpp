@@ -1,20 +1,10 @@
 ﻿#include <avr/io.h>
-#include <avr/interrupt.h>
 #include <string.h>
-#include <ctype.h>
 #include "Multiplexer.h"
-#include "USART.h"
-#define F_CPU 16000000UL
-#include <util/delay.h>
-#include <stdlib.h>
+
 #define S0 3
 #define S1 4
-
-USART usart1;
-
-volatile uint8_t attenuation[5];
-volatile uint8_t macAddress[15];
-volatile uint8_t time[15];
+#define NUMBER_OF_RECEIVERS 3
 
 Multiplexer::Multiplexer() {
 }
@@ -24,27 +14,27 @@ void Multiplexer::init() {
 	this->bufferIndex = 0;
 	DDRB |= (1<< S0);
 	DDRB |= (1<< S1);
-	this->receivers[0] = Receiver();
-	this->receivers[1] = Receiver();
-	this->receivers[2] = Receiver();
+	for(int i = 0; i < NUMBER_OF_RECEIVERS; i++) {
+		this->receivers[i] = Receiver();
+	}
 }
 
 void Multiplexer:: incrementPort() {
-	switch (this->currentPort) {
+	switch (currentPort) {
 		case 0:            // Note the colon, not a semicolon
 			PORTB &= ~(1<< S0);
 			PORTB |= (1<< S1);
-			this->currentPort = 1;
+			currentPort = 1;
 		break;
 		case 1:            // Note the colon, not a semicolon
 			PORTB &= ~(1<< S1);
 			PORTB |= (1<< S0);
-			this->currentPort = 2;
+			currentPort = 2;
 		break;
 		case 2:            // Note the colon, not a semicolon
 			PORTB &= ~(1<< S0);
 			PORTB &= ~(1<< S1);
-			this->currentPort = 0;
+			currentPort = 0;
 		break;
 	}
 }
@@ -52,9 +42,8 @@ void Multiplexer:: incrementPort() {
 void Multiplexer:: addToBuffer(char c) 
 {
 	//REC=0x000131F&-101&13787777\n
-	uint16_t currentPort = this->currentPort; //port could change while in this method
 	if(c == '\n') {
-		parseBuffer(currentPort);
+		parseBuffer();
 		memset((char *)&buffer[0], 0, sizeof(buffer));
 		bufferIndex = 0;
 	}
@@ -68,37 +57,23 @@ void Multiplexer:: addToBuffer(char c)
 	}
 }
 //REC=0x000131F&-101&13787777\n
-void Multiplexer::parseBuffer(uint16_t port) {
+void Multiplexer::parseBuffer() {
 	if(verifyCorrectBeginning()) {
 		uint16_t macStart = 4;
 		uint16_t macEnd = getNextAmpersand(macStart);
+		uint16_t macLength = macEnd - macStart;
+		
 		uint16_t attenuationStart = macEnd + 1;
 		uint16_t attenuationEnd = getNextAmpersand(macEnd + 1);
+		uint16_t attenuationLength = attenuationEnd -attenuationStart;
+		
 		uint16_t timeStart = attenuationEnd + 1;
 		uint16_t timeEnd = bufferIndex;
-		if(macEnd != 0 &&  attenuationEnd != 0) {
-			
-			//char* macAddress = (char*) malloc(10);
-			//char* time = (char*) malloc(15);
-					
-			memcpy((char *)macAddress, (char *)&buffer[macStart], (macEnd - macStart));
-			memcpy((char *)attenuation, (char *)&buffer[attenuationStart], (attenuationEnd - attenuationStart));
-			memcpy((char *)time, (char *)&buffer[timeStart], (bufferIndex - timeStart));
-			
-			//Rethink validation.. could be breaking here
-			//if(validateMacAddress(macAddress) && validateAttenuation(attenuation) && validateTime(time))
-			//{
-				usart1.transmit_Str("WRITING!");
-				_delay_ms(10);
-				//receivers[port].clear();
-				//receivers[port].setMacAddress(macAddress);
-				//receivers[port].setAttenuation(attenuation);
-				//receivers[port].setLastUpdatedTime(time);
-			//}
-			
-			//free(macAddress);
-			//free(attenuation);
-			//free(time);
+		uint16_t timeLength = timeEnd - timeStart;
+		if(macLength > 5 &&  attenuationLength > 2 && timeLength > 9) {
+			memcpy((char *)receivers[currentPort].macAddress,  (char *)&buffer[macStart],         (macLength));
+			memcpy((char *)receivers[currentPort].attenuation, (char *)&buffer[attenuationStart], (attenuationLength));
+			memcpy((char *)receivers[currentPort].time,        (char *)&buffer[timeStart],        (timeLength));
 		}
 	}
 }
@@ -112,52 +87,6 @@ bool Multiplexer::verifyCorrectBeginning() {
 	return false;
 }
 
-bool Multiplexer::validateMacAddress(char macAddress[]) {
-	if(macAddress[0] != '0' && macAddress[1] != 'x') {
-		return false;
-	}
-	int i = 2;
-	while(macAddress[i] != 0) {
-		if(!isxdigit(macAddress[i])) {
-			return false;
-		}
-		if(i > 10) {
-			return false;
-		}
-		i++;
-	}
-	return true;
-}
-bool Multiplexer::validateAttenuation(char attenuation[]) {
-	if(attenuation[0] != '-') {
-		return false;
-	}
-	int i = 1;
-	while(attenuation[i] != 0) {
-		if(!isdigit(attenuation[i])) {
-			return false;
-		}
-		if(i > 5) {
-			return false;
-		}
-		i++;
-	}
-	return true;
-}
-bool Multiplexer::validateTime(char time[]) {
-	int timeLength = 0;
-	while(time[timeLength] != 0) {
-		if(!isdigit(time[timeLength])) {
-			return false;
-		}
-		timeLength++;
-	}
-	if(timeLength != 10) {
-		return false;
-	}
-	return true;
-}
-
 uint16_t Multiplexer::getNextAmpersand(uint16_t index) {
 	for (int i = index; i < bufferIndex; i++) {
 		if(buffer[i] == '&') {
@@ -168,21 +97,14 @@ uint16_t Multiplexer::getNextAmpersand(uint16_t index) {
 }
 
 void Multiplexer::getReceiversString(char *string) {
-	//receivers[0].toString(string);
-	//receivers[1].toString(string);
-	//receivers[2].toString(string);
-	strcat(string, "MAC=");
-	strcat(string, (char *)macAddress);
-	strcat(string, "&ATTEN=");
-	strcat(string, (char *)attenuation);
-	strcat(string, "&TIME=");
-	strcat(string, (char *)time);
-}
-
-void Multiplexer::clearAllReceivers() {
-	receivers[0].clear();
-	receivers[1].clear();
-	receivers[2].clear();
+	for(int i = 0; i < NUMBER_OF_RECEIVERS; i++) {
+		strcat(string, "MAC=");
+		strcat(string, (char *)receivers[i].macAddress);
+		strcat(string, "&ATTEN=");
+		strcat(string, (char *)receivers[i].attenuation);
+		strcat(string, "&TIME=");
+		strcat(string, (char *)receivers[i].time);
+	}
 }
 
 bool Multiplexer::isReceivingData() {
