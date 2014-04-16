@@ -6,7 +6,7 @@ Field::Field()
 Field::Field(char *description)
 {
 	this->description = description;
-	this->value = 0;
+	value = 0;
 }
 Field::Field(char *description, char *value)
 {

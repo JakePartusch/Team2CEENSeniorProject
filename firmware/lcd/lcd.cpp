@@ -15,20 +15,20 @@ LCD::LCD(EEProm eeProm)
 }
 void LCD::refresh()
 {
-	this->currentScreen.clearScreen();
-	this->homeScreen = buildHomeScreen();
-	this->currentScreen = this->homeScreen;
-	this->currentScreen.drawScreen();
+	currentScreen.clearScreen();
+	homeScreen = buildHomeScreen();
+	currentScreen = homeScreen;
+	currentScreen.drawScreen();
 }
 void LCD::init()
 {
-	this->receiverScreen = buildReceiverScreen();
-	this->transmitterScreen = buildTransmitterScreen();
-	this->menuScreen = buildMenuScreen();
-	this->homeScreen = buildHomeScreen();
+	receiverScreen = buildReceiverScreen();
+	transmitterScreen = buildTransmitterScreen();
+	menuScreen = buildMenuScreen();
+	homeScreen = buildHomeScreen();
 	
-	this->currentScreen = this->homeScreen;
-	this->currentScreen.drawScreen();
+	currentScreen = homeScreen;
+	currentScreen.drawScreen();
 }
 Screen LCD::buildTransmitterScreen()
 {
@@ -60,8 +60,8 @@ Screen LCD::buildMenuScreen()
 }
 Screen LCD::buildHomeScreen()
 {
-	this->eeProm.getAttenuation(this->attenuation);
-	homeFields[1] = Field("Current", this->attenuation);
+	this->eeProm.getAttenuation(attenuation);
+	homeFields[1] = Field("Current", attenuation);
 	homeFields[2] = Field("Menu");
 	Screen screen("HOME", 3);
 	screen.fields = homeFields;

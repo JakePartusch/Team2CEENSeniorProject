@@ -3,7 +3,7 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include "lcd.h"
-#include "../EEProm/EEProm/USART.h"
+#include "USART.h"
 
 
 USART usart = USART(0, 103);

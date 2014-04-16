@@ -37,54 +37,54 @@ void Screen::drawScreen()
 
 void Screen::drawTitle()
 {
-	this->yTitle = 10;
-	this->xTitle = 50 - ((strlen(this->title)-5)*10);
-	this->titleSize = 5;
-	if(strlen(this->title) > 7)
+	yTitle = 10;
+	xTitle = 50 - ((strlen(title)-5)*10);
+	titleSize = 5;
+	if(strlen(title) > 7)
 	{
-		this->titleSize = 4;
+		titleSize = 4;
 	}
-	if(strlen(this->title) > 9)
+	if(strlen(title) > 9)
 	{
-		this->titleSize = 3;
-		this->xTitle = 30;
+		titleSize = 3;
+		xTitle = 30;
 	}
-	printText(this->title, this->titleSize, this->xTitle, this->yTitle);
+	printText(title, titleSize, xTitle, yTitle);
 	drawUnderline();
 }
 void Screen::drawUnderline()
 {
 	int x = 0;
-	int y = yTitle + (10*this->titleSize);
+	int y = yTitle + (10*titleSize);
 	int width = tft.width();
 	int height = 5;
 	tft.fillRect(x, y, width, height, TEXT_COLOR);
 }
 void Screen::drawFields()
 {
-	for(int i = 1; i < this->fieldLength; i++)
+	for(int i = 1; i < fieldLength; i++)
 	{
-		this->fields[i].xCoordinate = 20;
-		this->fields[i].yCoordinate = (tft.height()/(fieldLength))*i;
+		fields[i].xCoordinate = 20;
+		fields[i].yCoordinate = (tft.height()/(fieldLength))*i;
 		if(i == 1)
 		{
 			selectField(i);
 		}
 		char str[80];
 		str[0] = 0; 
-		strcat (str, this->fields[i].description);
+		strcat (str, fields[i].description);
 		strcat (str, " ");
-		strcat (str, this->fields[i].value);
+		strcat (str, fields[i].value);
 		
-		printText(str, 3, this->fields[i].xCoordinate, this->fields[i].yCoordinate);
+		printText(str, 3, fields[i].xCoordinate, fields[i].yCoordinate);
 	}
 }
 
 int Screen::getSelectedIndex()
 {
-	for(int i = 1; i < this->fieldLength; i++)
+	for(int i = 1; i < fieldLength; i++)
 	{
-		if(this->fields[i].isSelected)
+		if(fields[i].isSelected)
 		{
 			return i;
 		}
@@ -96,7 +96,7 @@ void Screen::moveSelectedDown()
 	int index = getSelectedIndex();
 	unselectField(index);
 	index++;
-	if(index == this->fieldLength)
+	if(index == fieldLength)
 	{
 		index = 1;
 	}
@@ -105,16 +105,16 @@ void Screen::moveSelectedDown()
 
 void Screen::selectField(int index)
 {
-	this->fields[index].selectedX = this->fields[index].xCoordinate - 15;
-	this->fields[index].selectedY = this->fields[index].yCoordinate + 5;
-	this->fields[index].isSelected = true;
-	drawRectanglePointer(this->fields[index].selectedX, this->fields[index].selectedY);
+	fields[index].selectedX = fields[index].xCoordinate - 15;
+	fields[index].selectedY = fields[index].yCoordinate + 5;
+	fields[index].isSelected = true;
+	drawRectanglePointer(fields[index].selectedX, fields[index].selectedY);
 }
 
 void Screen::unselectField(int index)
 {
-	this->fields[index].isSelected = false;
-	eraseRectanglePointer(this->fields[index].selectedX, this->fields[index].selectedY);
+	fields[index].isSelected = false;
+	eraseRectanglePointer(fields[index].selectedX, fields[index].selectedY);
 }
 void Screen::printText(char *c, int size, int x, int y)
 {
@@ -149,13 +149,13 @@ void Screen::eraseFields()
 {
 	for(int i = 1; i < fieldLength; i++)
 	{
-		this->fields[i];
-		int x = this->fields[i].xCoordinate;
-		if(this->fields[i].isSelected)
+		fields[i];
+		int x = fields[i].xCoordinate;
+		if(fields[i].isSelected)
 		{
-			x = this->fields[i].selectedX;
+			x = fields[i].selectedX;
 		}
-		int y = this->fields[i].yCoordinate;
+		int y = fields[i].yCoordinate;
 		int width = tft.width();
 		int height = 25;
 		tft.fillRect(x, y, width, height, BACKGROUND_COLOR);
@@ -164,8 +164,8 @@ void Screen::eraseFields()
 void Screen::eraseTitle()
 {
 	int x = 0;
-	int y = this->yTitle;
+	int y = yTitle;
 	int width = tft.width();
-	int height = (this->titleSize*10)+ 5;
+	int height = (titleSize*10)+ 5;
 	tft.fillRect(x, y, width, height, BACKGROUND_COLOR);
 }
