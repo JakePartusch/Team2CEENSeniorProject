@@ -7,16 +7,16 @@ class Multiplexer {
 		int bufferIndex;
 		bool verifyCorrectBeginning();
 		uint16_t getNextAmpersand(uint16_t index);
-		Receiver receivers[];
-		
+				
 	public:
 		Multiplexer();
 		bool isReceivingData();
-		void init();
+		void init(Receiver *receivers);
 		void incrementPort();
 		void addToBuffer(char c);
 		void getReceiversString(char *string);
 		void clearAllReceivers();
 		bool isBufferFull();
 		void parseBuffer();
+		Receiver *receivers;
 	};

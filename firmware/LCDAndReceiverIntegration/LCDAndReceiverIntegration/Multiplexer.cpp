@@ -11,16 +11,15 @@
 
 USART usart1;
 Multiplexer::Multiplexer() {
+	
 }
 
-void Multiplexer::init() {
+void Multiplexer::init(Receiver *receivers) {
+	this->receivers = receivers;
 	this->currentPort = 0;
 	this->bufferIndex = 0;
 	DDRB |= (1<< S0);
 	DDRB |= (1<< S1);
-	for(int i = 0; i < NUMBER_OF_RECEIVERS; i++) {
-		this->receivers[i] = Receiver();
-	}
 }
 
 void Multiplexer:: incrementPort() {
