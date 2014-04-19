@@ -4,6 +4,7 @@
 #include "USART.h"
 #define F_CPU 16000000UL
 #include <avr/delay.h>
+#include <stdio.h>
 
 #define S0 3
 #define S1 4
@@ -105,14 +106,16 @@ uint16_t Multiplexer::getNextAmpersand(uint16_t index) {
 }
 
 void Multiplexer::getReceiversString(char *string) {
+		strcat(string, "NODE=1");
 	for(int i = 0; i < NUMBER_OF_RECEIVERS; i++) {
-		strcat(string, "MAC=");
-		strcat(string, (char *)receivers[i].macAddress);
+		char intToString[16];
+		snprintf(intToString, sizeof(intToString), "%d", i+1);
+		strcat(string, "&PORT=");
+		strcat(string, intToString);
 		strcat(string, "&ATTEN=");
 		strcat(string, (char *)receivers[i].attenuation);
-		strcat(string, "&TIME=");
-		strcat(string, (char *)receivers[i].time);
 	}
+	strcat(string, "\n");
 }
 
 bool Multiplexer::isReceivingData() {

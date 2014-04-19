@@ -1,11 +1,6 @@
 <?php
-error_reporting(E_ERROR | E_PARSE);
-set_include_path ( "./classes" );
-spl_autoload_register ();
-
 class Utils
 {
-
 
 public function getReceiverIds($allRecords)
 {
@@ -112,23 +107,27 @@ public function queryData($query)
 	if ($result = $mysqli->query($sql = $query)) 
 	{
 		$allRecords = $result->fetch_all();
+		$result->close();
+		return $allRecords;
+	}
+}
+
+public function getAttenuationObjects($allRecords)
+{
 		$data = array();
 		foreach($allRecords as $record)
 		{
 			array_push($data, $this->createAttenuationObject($record));
 		}
-		$result->close();
 		return $data;
-	}
 }
-
 public function createAttenuationObject($record)
 {
 	$attenuationReading = new AttenuationReading();
 	$attenuationReading->utc = strtotime($record[2]);
 	$attenuationReading->attenuation = intVal($record[1]);
-	$attenuationReading->receiverId = $record[3];
-	$attenuationReading->frequency = $record[4];
+	$attenuationReading->nodeId = intVal($record[3]);
+	$attenuationReading->portId = intVal($record[4]);
 	return $attenuationReading;
 	
 }

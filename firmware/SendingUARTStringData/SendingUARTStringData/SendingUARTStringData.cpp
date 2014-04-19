@@ -11,8 +11,10 @@
 #define F_CPU 16000000UL
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include <stdlib.h>
 
 USART usart0 = USART(0, 103);
+uint16_t timerCounter =0;
 int main(void)
 {
 	
@@ -26,6 +28,10 @@ int main(void)
 }
 ISR ( TIMER1_OVF_vect )
 {
-	usart0.transmit_Str("REC=0x003333&-102&1397187777\n");
+	if(timerCounter == 10) {
+		usart0.transmit_Str("NODE=1&PORT=1&ATTEN=-102&PORT=2&ATTEN=-90&PORT=&ATTEN=\n");
+		timerCounter = 0;
+	}
+	timerCounter++;
 	TCNT1 = 49910;
 }

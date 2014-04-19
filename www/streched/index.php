@@ -16,12 +16,31 @@
 	
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
-
+var chart;
 $(function () {
         var options ={
             chart: {
 				renderTo: 'container',
-                type: 'spline'
+                type: 'spline',
+				events: {
+                    load: function() {
+						setInterval(function() {
+                            $.getJSON('getData.php', function(data) {
+								var names = [];
+								var attenuationData = [];
+								 $.each( data, function( key, val ) {
+									names.push(key);
+									attenuationData.push(val);
+								 });
+								 var i = 0;
+								 $.each (attenuationData, function(key, val){
+									chart.series[i].setData(val,true);
+									i++
+								 });
+							});
+                        }, 2000);
+                    }
+                }
             },
             title: {
                 text: 'Attentuation Data of the Concrete'
@@ -39,8 +58,7 @@ $(function () {
             yAxis: {
                 title: {
                     text: 'Attenuation (dbm)'
-                },
-                min: 0
+                }
             },
             tooltip: {
                 formatter: function() {
@@ -49,27 +67,27 @@ $(function () {
                 }
             },
             
-            series: [{},{}]
+            series: [{},{},{},{},{},{}]
         };
 		
 		$.getJSON('getData.php', function(data) {
-		var names = [];
-		var attenuationData = [];
-		 $.each( data, function( key, val ) {
-			names.push(key);
-			attenuationData.push(val);
-		 });
-		 var i = 0;
-		 $.each (names, function(key, val){
-			options.series[i].name = val;
-			i++
-		 });
-		 var i = 0;
-		 $.each (attenuationData, function(key, val){
-			options.series[i].data = val;
-			i++
-		 });
-        var chart = new Highcharts.Chart(options);
+			var names = [];
+			var attenuationData = [];
+			 $.each( data, function( key, val ) {
+				names.push(key);
+				attenuationData.push(val);
+			 });
+			 var i = 0;
+			 $.each (names, function(key, val){
+				options.series[i].name = val;
+				i++
+			 });
+			 var i = 0;
+			 $.each (attenuationData, function(key, val){
+				options.series[i].data = val;
+				i++
+			 });
+			chart = new Highcharts.Chart(options);
 		});
     });
 	
@@ -79,24 +97,7 @@ $(function () {
 </head>
 
 <body id="top">					
-<!-- START HEADER -->
-<div id="header-wrapper">
-	<div class="header clear">
-		<div id="logo">	
-			<a href="index.html"><img src="images/logo.jpg" alt="" /></a>		
-		</div><!--END LOGO-->
-		<div id="primary-menu">
-			<ul class="menu">
-				<li><a href="index.html">Home</a>		
-					<ul>
-						<li><a href="index.html">Home</a></li>
-					</ul>
-			   </li>
-			</ul>
-		</div><!--END PRIMARY MENU-->
-	</div><!--END HEADER-->	
-</div><!--END HEADER-WRAPPER-->		
-<!-- END HEADER -->
+
 <div id="wrapper">	
 <!-- START BLOG -->
 <div class="content-wrapper clear">
@@ -157,16 +158,5 @@ $(function () {
 </div><!--END CONTENT-WRAPPER--> 
 <!-- END BLOG -->
 </div><!--END WRAPPER--> 
-<!-- START FOOTER -->
-<div id="footer">
-	<div id="footer-content">		
-		<div id="footer-bottom" class="clear">			
-			<div class="one-half">
-				<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/">Creative Commons Attribution-NonCommercial 3.0 Unported License</a>.
-			</div><!--END ONE-HALF-->	
-		</div><!--END FOOTER-BOTTOM-->	
-	</div><!--END FOOTER-CONTENT-->	
-</div><!--END FOOTER-->
-
 </body>
 </html>
