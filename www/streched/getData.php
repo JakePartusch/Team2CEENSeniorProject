@@ -4,8 +4,14 @@ set_include_path ( "./classes" );
 spl_autoload_register ();
 
 $utils = new utils();
-$allRecords = $utils->queryData("SELECT * FROM `attenuationdata`");
-//$receiverIdArray = $utils->getReceiverIds($allRecords);
+if(empty($_GET[startTmst])) {
+	$query = "SELECT * FROM `attenuationdata`";
+}
+else {
+	$query = "SELECT * FROM `attenuationdata` WHERE TIMESTAMP > '$_GET[startTmst]'";
+}
+$allRecords = $utils->queryData($query);
+$allRecords = $utils->getAttenuationObjects($allRecords);
 $json = new Json();
 foreach($allRecords as $record)
 {

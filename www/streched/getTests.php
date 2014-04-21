@@ -10,6 +10,7 @@ foreach($allRecords as $record) {
 	foreach($allRecords as $record)
 	{
 		$test = new Test();
+		$test->id = $record[0];
 		$test->name = $record[1];
 		$test->startTmst = $record[2];
 		$test->endTmst = $record[3];

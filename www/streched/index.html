@@ -82,7 +82,7 @@
 	var options;
 	elem.onchange = function(){
 		var hiddenDiv = document.getElementById("showMe");
-		hiddenDiv.style.display = (this.value != "New Test") ? "none":"block";
+		hiddenDiv.style.display = (this.value != -1) ? "none":"block";
 	};
 	
 	$.getJSON('getTests.php', function(data) {
@@ -102,13 +102,18 @@
 	});
 	$("#submit").click( function() {
 		optionIndex = $('#selectbasic').val();
+		var data = options.Options[optionIndex];
+		if(data == undefined) {
+			data = {name: $('#name').val()}; 
+		}
 		$.ajax({
 		  type: "POST",
 		  url: "getTestUrl.php",
-		  data: options.Options[optionIndex],
+		  data: data,
 		  async: true,
 		  success: function (url) {
                 window.location.assign(url);
+				//alert(url);
             }
 		});
 		return false;
