@@ -67,7 +67,7 @@
 			<input id="name" name="name" type="text" placeholder="Test Name" class="input-large">
 		  </div>
 		</div>
-        <button class="btn btn-primary" type="submit">Start</button>
+        <button class="btn btn-primary" id="submit">Start</button>
       </form>
 
     </div> <!-- /container -->
@@ -79,28 +79,40 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script  type="text/javascript">
 	var elem = document.getElementById("selectbasic");
+	var options;
 	elem.onchange = function(){
 		var hiddenDiv = document.getElementById("showMe");
 		hiddenDiv.style.display = (this.value != "New Test") ? "none":"block";
 	};
 	
 	$.getJSON('getTests.php', function(data) {
-		var options = eval(data); // myJson is your data variable
+		options = eval(data); // myJson is your data variable
 		var length = options.Options.length;
 		var newOption = $('<option/>');
 			newOption.attr('label', "New Test");
-			newOption.attr('value', "New Test"); // fixed typo
+			newOption.attr('value', -1); // fixed typo
 			$('#selectbasic').append(newOption);
 		for(var j = 0; j < length; j++)
 		{
 			var newOption = $('<option/>');
-			newOption.attr('label', options.Options[j]);
-			newOption.attr('value', options.Options[j]); // fixed typo
+			newOption.attr('label', options.Options[j].name);
+			newOption.attr('value', j); // fixed typo
 			$('#selectbasic').append(newOption);
 		}
 	});
-	
-	
+	$("#submit").click( function() {
+		optionIndex = $('#selectbasic').val();
+		$.ajax({
+		  type: "POST",
+		  url: "getTestUrl.php",
+		  data: options.Options[optionIndex],
+		  async: true,
+		  success: function (url) {
+                window.location.assign(url);
+            }
+		});
+		return false;
+	});
 	</script>
    
 

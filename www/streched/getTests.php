@@ -9,7 +9,11 @@ foreach($allRecords as $record) {
 	$data = array();
 	foreach($allRecords as $record)
 	{
-		array_push($data, $record[1]);
+		$test = new Test();
+		$test->name = $record[1];
+		$test->startTmst = $record[2];
+		$test->endTmst = $record[3];
+		array_push($data, $test);
 	}
 }
 echo json_encode(array(
