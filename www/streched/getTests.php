@@ -11,8 +11,7 @@ foreach($allRecords as $record) {
 	{
 		array_push($data, $record[1]);
 	}
-	$result->close();
 }
 echo json_encode(array(
-    'Options' => $data);
+    'Options' => $data));
 ?>
