@@ -6,20 +6,73 @@
 <meta name="viewport" content="width=device-width" />
 <title>Team 2</title>
 
+<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/blog.css" media="screen" />
 <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css' />
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+
+</head>
+
+<body id="top">					
+
+<div id="wrapper">	
+<!-- START BLOG -->
+<div class="content-wrapper clear">
+		<div id="inner-content" class="blog1">
+			<div class="post">
+				<div class="post-info">				
+				<?php
+					date_default_timezone_set('America/Mexico_City');
+					echo '<div class="date"><span class="month">';
+					echo date('M');
+					echo '</span><span class="day">';
+					echo date('d');
+					echo '</span><span class="month">';
+					echo date('Y');
+					echo '</span></div>';	
+				?>
+				</div><!--END POST-INFO-->		
+				<div class="post-content">	
+					<div class="post-title" style="margin-bottom:2%">				
+						<h2 class="title"><a href="blog-single.html">Project Shield</a></h2>
+					</div><!--END POST-TITLE-->
+					
+					<div class="btn-group">
+							<button class="btn btn-danger" id="submit">Stop Test</button>
+						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+							Filter
+							<span class="caret"></span>
+						  </a>
+						  <ul class="dropdown-menu">
+								<li><a href="#" id ="day" >Day</a></li>
+								<li><a href="#week" id ="week">Week</a></li>
+								<li><a href="#month" id ="month">Month</a></li>
+								<li><a href="#year" id ="year">Year</a></li>
+								<li><a href="#all" id ="all">All-Time</a></li>
+								<li><a href="" id ="clear">Clear Filter</a></li>
+						  </ul>
+					</div>
+					
+				</div><!--END POST-CONTENT -->
+				<div id="container" style="min-width: 310px; height: 100%; margin: 0 auto"></div>
+			</div><!--END POST-->
+		</div><!--END INNER-CONTENT-->
+</div><!--END CONTENT-WRAPPER--> 
+<!-- END BLOG -->
+</div><!--END WRAPPER--> 
+</body>
+<script src="http://code.jquery.com/jquery.js"></script>
 <script type="text/javascript" src="javascript/custom.js"></script>
 <script type="text/javascript" src="javascript/header.js"></script>
-	
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
+ <script type="text/javascript">
 var chart;
 var startTimestamp = getUrlParameters("startTmst", "", true);
-var encodedTmst = $.param({startTmst: startTimestamp});
-var getDataURL = "getData.php?" + encodedTmst;
+var endTimestamp = getUrlParameters("endTmst", "", true);
+var encodedStartTmst = $.param({startTmst: startTimestamp});
+var encodedEndTmst = $.param({endTmst: endTimestamp});
+var getDataURL = "getData.php?" + encodedStartTmst + "&" + encodedEndTmst;
 $(function () {
         var options ={
             chart: {
@@ -117,72 +170,47 @@ function getUrlParameters(parameter, staticURL, decode){
    }
    if(!returnBool) return false;  
 }	
+$("#submit").click( function() {
+		var startTimestamp = getUrlParameters("id", "", true);
+		var data = {id:startTimestamp}
+		$.ajax({
+		  type: "POST",
+		  url: "addExpirationDate.php",
+		  data: data,
+		  async: true,
+		  success: function (url) {
+                window.location.assign(url);
+				//alert(url);
+            }
+		});
+		return false;
+	});
+$("#day").click( function() {
+		getDataURL = "getData.php?" + encodedStartTmst + "&" + encodedEndTmst + "&day=true" ;
+		return true;
+	});
+$("#week").click( function() {
+		getDataURL = "getData.php?" + encodedStartTmst + "&" + encodedEndTmst + "&week=true" ;
+		return true;
+	});
+$("#month").click( function() {
+		getDataURL = "getData.php?" + encodedStartTmst + "&" + encodedEndTmst + "&month=true" ;
+		return true;
+	});
+$("#year").click( function() {
+		getDataURL = "getData.php?" + encodedStartTmst + "&" + encodedEndTmst + "&year=true" ;
+		return true;
+	});
+$("#all").click( function() {
+		getDataURL = "getData.php?" + encodedStartTmst + "&" + encodedEndTmst + "&all=true" ;
+		return true;
+	});
+$("#clear").click( function() {
+		getDataURL = "getData.php?" + encodedStartTmst + "&" + encodedEndTmst;
+		return true;
+	});
     </script>
 <script src="../../js/highcharts.js"></script>
 <script src="../../js/modules/exporting.js"></script>
-</head>
-
-<body id="top">					
-
-<div id="wrapper">	
-<!-- START BLOG -->
-<div class="content-wrapper clear">
-		<div id="inner-content" class="blog1">
-			<div class="post">
-				<div class="post-info">				
-				<?php
-					echo '<div class="date"><span class="month">';
-					echo date('M');
-					echo '</span><span class="day">';
-					echo date('d');
-					echo '</span><span class="month">';
-					echo date('Y');
-					echo '</span></div>';	
-				?>
-				</div><!--END POST-INFO-->		
-				<div class="post-content">	
-					<div class="post-title" style="margin-bottom:2%">				
-						<h2 class="title"><a href="blog-single.html">RF Monitoring System</a></h2>
-					</div><!--END POST-TITLE-->
-					<form action="redirect.php" method="post">
-						<select name="select_receiverId">
-						<?php
-							/*error_reporting(E_ERROR | E_PARSE);
-							set_include_path ( "./classes" );
-							spl_autoload_register ();
-							$utils = new Utils();
-							$allRecords = $utils->queryData("SELECT * FROM `attenuationdata`");
-							$receiverIdArray = $utils->getReceiverIds($allRecords);
-							foreach($receiverIdArray as $receiverId)
-							{
-							echo $receiverId;
-							echo $_GET['receiverId'];
-								if($receiverId == $_GET['receiverId'])
-								{
-									
-									echo '<option value="'.$receiverId.'" selected>Receiver '.$receiverId.'</option>';
-								}
-								else
-								{
-									echo '<option value="'.$receiverId.'">Receiver '.$receiverId.'</option>';
-								}
-							}*/
-						?>
-						</select>
-						<select name= "select_range">
-							<option value="today">Today</option>
-							<option value="week">Week</option>
-							<option value="month">Month</option>
-							<option value="year">Year</option>
-						</select>
-						<input type="submit" />
-					</form>
-				</div><!--END POST-CONTENT -->
-				<div id="container" style="min-width: 310px; height: 100%; margin: 0 auto"></div>
-			</div><!--END POST-->
-		</div><!--END INNER-CONTENT-->
-</div><!--END CONTENT-WRAPPER--> 
-<!-- END BLOG -->
-</div><!--END WRAPPER--> 
-</body>
+<script src="js/bootstrap.min.js"></script>
 </html>

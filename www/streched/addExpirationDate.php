@@ -4,7 +4,9 @@ set_include_path ( "./classes" );
 spl_autoload_register ();
 
 $utils = new utils();
-if(empty($_POST["startTmst"])) {
+if(empty($_POST["id"])) {
+}
+else {
 	date_default_timezone_set('America/Mexico_City');
 	$date = date('Y-m-d h:i:s');
 	$mysqli = new mysqli("localhost", "jpartusch", "password", "mysql");
@@ -14,14 +16,13 @@ if(empty($_POST["startTmst"])) {
 		printf("Connect failed: %s\n", $mysqli->connect_error);
 		exit();
 	}
-	$name = mysqli_real_escape_string($mysqli, $_POST['name']);
-	$date = mysqli_real_escape_string($mysqli, $date);
-	$query = "INSERT INTO `test` (`ID`, `NAME`, `START_TMST`, `END_TMST`) VALUES (NULL, '$name', '$date', NULL)";
+	$id = mysqli_real_escape_string($mysqli, $_POST['id']);
+	$endTmst = mysqli_real_escape_string($mysqli, $date);
+	$query = "UPDATE `test` SET END_TMST='$endTmst' WHERE ID='$id'";
 	mysqli_query($mysqli, $query);
-	$query = "Select * from `test` WHERE NAME='$name' AND START_TMST='$date'";
+	$query = "Select * from `test` WHERE ID='$id'";
 	$allRecords = $utils->queryData($query);
-	mysqli_close($mysqli);
-	print_r($result);
+	mysqli_close($mysqli);;
 	foreach($allRecords as $record)
 	{
 		$test = new Test();
@@ -31,8 +32,5 @@ if(empty($_POST["startTmst"])) {
 		$test->endTmst = $record[3];
 	}
 	echo "http://localhost/index.php?" . http_build_query($test);
-}
-else {
-	echo "http://localhost/index.php?" . http_build_query($_POST);
 }
 ?>

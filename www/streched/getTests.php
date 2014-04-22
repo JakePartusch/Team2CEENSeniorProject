@@ -4,7 +4,7 @@ set_include_path ( "./classes" );
 spl_autoload_register ();
 
 $utils = new utils();
-$allRecords = $utils->queryData("SELECT * FROM `test`");
+$allRecords = $utils->queryData("SELECT * FROM `test` ORDER BY START_TMST DESC");
 foreach($allRecords as $record) {
 	$data = array();
 	foreach($allRecords as $record)

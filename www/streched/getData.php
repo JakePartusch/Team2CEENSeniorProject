@@ -4,11 +4,45 @@ set_include_path ( "./classes" );
 spl_autoload_register ();
 
 $utils = new utils();
-if(empty($_GET[startTmst])) {
-	$query = "SELECT * FROM `attenuationdata`";
+date_default_timezone_set('America/Mexico_City');
+$date = date('Y-m-d h:i:s');
+if(empty($_GET[day]) && empty($_GET[week]) && empty($_GET[month]) && empty($_GET[year]) && empty($_GET[all])) {
+	 if(empty($_GET[startTmst])) {
+		$query = "SELECT * FROM `attenuationdata`";
+	}
+	else {
+		if(empty($_GET[endTmst])) {
+			$query = "SELECT * FROM `attenuationdata` WHERE TIMESTAMP > '$_GET[startTmst]'";
+		}
+		else {
+			$query = "SELECT * FROM `attenuationdata` WHERE TIMESTAMP > '$_GET[startTmst]' AND TIMESTAMP < '$_GET[endTmst]'";
+		}
+	}
 }
 else {
-	$query = "SELECT * FROM `attenuationdata` WHERE TIMESTAMP > '$_GET[startTmst]'";
+	if(!empty($_GET[day])) {
+		$time = strtotime("-1 day");
+		$date = date('Y-m-d h:i:s', $time);
+		$query = "SELECT * FROM `attenuationdata` WHERE TIMESTAMP > '$date'";
+	}
+	else if(!empty($_GET[week])) {
+		$time = strtotime("-1 week");
+		$date = date('Y-m-d h:i:s', $time);
+		$query = "SELECT * FROM `attenuationdata` WHERE TIMESTAMP > '$date'";
+	}
+	else if(!empty($_GET[month])) {
+		$time = strtotime("-1 month");
+		$date = date('Y-m-d h:i:s', $time);
+		$query = "SELECT * FROM `attenuationdata` WHERE TIMESTAMP > '$date'";
+	}
+	else if(!empty($_GET[year])) {
+		$time = strtotime("-1 year");
+		$date = date('Y-m-d h:i:s', $time);
+		$query = "SELECT * FROM `attenuationdata` WHERE TIMESTAMP > '$date'";
+	}
+	else if(!empty($_GET[all])) {
+		$query = "SELECT * FROM `attenuationdata`";
+	}
 }
 $allRecords = $utils->queryData($query);
 $allRecords = $utils->getAttenuationObjects($allRecords);
