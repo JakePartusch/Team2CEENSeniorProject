@@ -3,7 +3,7 @@
 #include "Multiplexer.h"
 #include "USART.h"
 #define F_CPU 16000000UL
-#include <avr/delay.h>
+#include <util/delay.h>
 #include <stdio.h>
 
 #define S0 3
@@ -57,28 +57,23 @@ void Multiplexer:: addToBuffer(char c)
 		bufferIndex++;
 	}
 }
-//REC=0x000131F&-101&13787777\n
+//REC=0x000131F&-101\n
 void Multiplexer::parseBuffer() {
 	if(verifyCorrectBeginning()) {
-		uint16_t macStart = 4;
-		uint16_t macEnd = getNextAmpersand(macStart);
-		uint16_t macLength = macEnd - macStart;
+		uint16_t serialStart = 4;
+		uint16_t serialEnd = getNextAmpersand(serialStart);
+		uint16_t serialLength = serialEnd - serialStart;
 		
-		uint16_t attenuationStart = macEnd + 1;
-		uint16_t attenuationEnd = getNextAmpersand(macEnd + 1);
+		uint16_t attenuationStart = serialEnd + 1;
+		uint16_t attenuationEnd = bufferIndex;
 		uint16_t attenuationLength = attenuationEnd -attenuationStart;
-		
-		uint16_t timeStart = attenuationEnd + 1;
-		uint16_t timeEnd = bufferIndex;
-		uint16_t timeLength = timeEnd - timeStart;
-		if(macLength > 3 &&  attenuationLength > 2 && timeLength > 5) {
-			memset((char *)receivers[currentPort].macAddress,	0, sizeof(receivers[currentPort].macAddress));
+
+		if(serialLength > 3 &&  attenuationLength > 2) {
+			memset((char *)receivers[currentPort].serialNumber,	0, sizeof(receivers[currentPort].serialNumber));
 			memset((char *)receivers[currentPort].attenuation,	0, sizeof(receivers[currentPort].attenuation));
-			memset((char *)receivers[currentPort].time,			0, sizeof(receivers[currentPort].time));
 			
-			memcpy((char *)receivers[currentPort].macAddress,  (char *)&buffer[macStart],         (macLength));
-			memcpy((char *)receivers[currentPort].attenuation, (char *)&buffer[attenuationStart], (attenuationLength));
-			memcpy((char *)receivers[currentPort].time,        (char *)&buffer[timeStart],        (timeLength));
+			memcpy((char *)receivers[currentPort].serialNumber,  (char *)&buffer[serialStart],      (serialLength));
+			memcpy((char *)receivers[currentPort].attenuation,   (char *)&buffer[attenuationStart], (attenuationLength));
 		}
 	}
 	memset((char *)&buffer[0], 0, sizeof(buffer));
@@ -128,9 +123,8 @@ bool Multiplexer::isReceivingData() {
 }
 void Multiplexer::clearAllReceivers() {
 	for(int i = 0; i < NUMBER_OF_RECEIVERS; i++) {
-		memset((char *)receivers[i].macAddress, 0, sizeof(receivers[i].macAddress));
+		memset((char *)receivers[i].serialNumber, 0, sizeof(receivers[i].serialNumber));
 		memset((char *)receivers[i].attenuation, 0, sizeof(receivers[i].attenuation));
-		memset((char *)receivers[i].time, 0, sizeof(receivers[i].time));
 	}
 }
 bool Multiplexer::isBufferFull() {

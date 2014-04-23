@@ -7,7 +7,6 @@
 #include "Receiver.h"
 #include "USART.h"
 #include "Timer.h"
-#include "Watchdog.h"
 #include "Multiplexer.h"
 #include "lcd.h"
 
@@ -17,12 +16,13 @@ USART usart;
 Multiplexer multiplexer;
 Timer xbeeTimer;
 Timer muxTimer;
-Watchdog watchdog;
+LCD lcd;
 
 Receiver receivers[NUMBER_OF_RECEIVERS];
 volatile uint8_t receiverData[200];
 volatile uint8_t isSendXbeeTime = 0;
 volatile uint8_t byteReceived;
+volatile uint8_t isLcdSelect = 0;
 void enableInterrupts();
 
 int main(void)
@@ -32,12 +32,11 @@ int main(void)
 		memset((char *)receivers[i].attenuation, 0, 5);
 	}
 	
-	LCD lcd = LCD(receivers);
+	lcd = LCD(receivers);
 	multiplexer.init(receivers);
 	usart.init(103);
 	xbeeTimer.init(1, 49910);
 	muxTimer.init(3, 49910);
-	watchdog.init();
 	multiplexer.clearAllReceivers();
 	enableInterrupts();
 	uint16_t refreshCount = 0;
@@ -46,7 +45,6 @@ int main(void)
 		if(multiplexer.isBufferFull()) {
 			cli();
 			multiplexer.parseBuffer();
-			usart.transmit_Str("Parse");
 			sei();
 		}
 		if(isSendXbeeTime == 1) {
@@ -64,6 +62,12 @@ int main(void)
 			isSendXbeeTime = 0;
 			sei();
 		}
+		if(isLcdSelect == 1) {
+			cli();
+			lcd.select();
+			isLcdSelect = 0;
+			sei();
+		}
 	}
 }
 
@@ -78,17 +82,16 @@ void enableInterrupts()
 ISR(PCINT0_vect) {
 	if(!(PINA & (1<<PINA5)))
 	{
-		//lcd.currentScreen.moveSelectedDown();
+		lcd.moveSelectedDown();
 	}
 	if(!(PINA & (1<<PINA6)))
 	{
-		usart.transmit('k');
+		isLcdSelect = 1;
 	}
 	if(!(PINA & (1<<PINA7)))
 	{
-		usart.transmit('l');
+		lcd.moveSelectedUp();
 	}
-	
 	_delay_ms(100);
 }
 ISR (USART1_RX_vect) {
@@ -98,7 +101,6 @@ ISR (USART1_RX_vect) {
 ISR (TIMER1_OVF_vect) {
 	isSendXbeeTime = 1;
 	xbeeTimer.reset();
-	watchdog.reset();
 }
 ISR (TIMER3_OVF_vect) {
 	if(!multiplexer.isReceivingData()) {

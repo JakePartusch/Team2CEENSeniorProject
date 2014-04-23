@@ -4,7 +4,6 @@
 class Screen
 {
 	private:
-		int getSelectedIndex();
 		void unselectField(int index);
 		void selectField(int index);
 		void printText(char *c, int size, int x, int y);
@@ -16,18 +15,21 @@ class Screen
 		void drawFields();
 		void eraseFields();
 		void eraseTitle();
-		char *title;
+		void eraseValues();
 		int xTitle;
 		int yTitle;
 		int titleSize;
 		int fieldLength;
 	public:
+		char *title;
 		Field *fields;
 		Screen(char *title, int fieldLength);
 		Screen();
 		void begin();
 		void drawScreen();
 		void moveSelectedDown();
-		void clearScreen();
+		void moveSelectedUp();
+		void clearScreen(bool onlyValue);
 		void init();
+		int getSelectedIndex();
 };

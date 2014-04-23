@@ -91,6 +91,7 @@ int Screen::getSelectedIndex()
 			return i;
 		}
 	}
+	return 0;
 }
 
 void Screen::moveSelectedDown()
@@ -101,6 +102,18 @@ void Screen::moveSelectedDown()
 	if(index == fieldLength)
 	{
 		index = 1;
+	}
+	selectField(index);
+}
+
+void Screen::moveSelectedUp()
+{
+	int index = getSelectedIndex();
+	unselectField(index);
+	index--;
+	if(index == 0)
+	{
+		index = fieldLength -1;
 	}
 	selectField(index);
 }
@@ -142,21 +155,31 @@ void Screen::drawBackground()
 	int i= min(tft.width(), tft.height());
 	tft.fillRoundRect(0, 0, tft.width(), tft.height(), i/8, BACKGROUND_COLOR);
 }
-void Screen::clearScreen()
+void Screen::clearScreen(bool onlyValue)
 {
-	eraseTitle();
-	eraseFields();
+	if(!onlyValue) {
+		eraseTitle();
+		eraseFields();
+	}
+	else {
+		eraseValues();
+	}
+}
+void Screen::eraseValues() {
+	for(int i = 1; i < 4; i++)
+	{
+		int x = 135;
+		int y = fields[i].yCoordinate;
+		int width = tft.width();
+		int height = 25;
+		tft.fillRect(x, y, width, height, BACKGROUND_COLOR);
+	}
 }
 void Screen::eraseFields()
 {
-	for(int i = 1; i < fieldLength; i++)
+	for(int i = 1; i < 4; i++)
 	{
-		fields[i];
-		int x = fields[i].xCoordinate;
-		if(fields[i].isSelected)
-		{
-			x = fields[i].selectedX;
-		}
+		int x = 0;
 		int y = fields[i].yCoordinate;
 		int width = tft.width();
 		int height = 25;
