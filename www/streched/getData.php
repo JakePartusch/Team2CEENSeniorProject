@@ -4,6 +4,10 @@ set_include_path ( "./classes" );
 spl_autoload_register ();
 
 $utils = new utils();
+$allRecords = $utils->queryData("SELECT * FROM `attenuationcalibration`");
+foreach($allRecords as $record) {
+	$calibration = $record[1];
+}
 date_default_timezone_set('America/Mexico_City');
 $date = date('Y-m-d H:i:s');
 if(empty($_GET[day]) && empty($_GET[week]) && empty($_GET[month]) && empty($_GET[year]) && empty($_GET[all])) {
@@ -53,17 +57,17 @@ foreach($allRecords as $record)
 	{
 		if($record->portId == 1)
 		{
-			$temp = array($record->utc * 1000, $record->attenuation);
+			$temp = array($record->utc * 1000, $record->attenuation - $calibration);
 			$json->NODE_1_PORT_1[] = $temp;
 		}
 		elseif($record->portId == 2)
 		{
-			$temp = array($record->utc * 1000, $record->attenuation);
+			$temp = array($record->utc * 1000, $record->attenuation  - $calibration);
 			$json->NODE_1_PORT_2[] = $temp;
 		}
 		elseif($record->portId == 3)
 		{
-			$temp = array($record->utc * 1000, $record->attenuation);
+			$temp = array($record->utc * 1000, $record->attenuation - $calibration);
 			$json->NODE_1_PORT_3[] = $temp;
 		}
 	}
@@ -71,17 +75,17 @@ foreach($allRecords as $record)
 	{
 		if($record->portId == 1)
 		{
-			$temp = array($record->utc * 1000, $record->attenuation);
+			$temp = array($record->utc * 1000, $record->attenuation - $calibration);
 			$json->NODE_2_PORT_1[] = $temp;
 		}
 		elseif($record->portId == 2)
 		{
-			$temp = array($record->utc * 1000, $record->attenuation);
+			$temp = array($record->utc * 1000, $record->attenuation - $calibration);
 			$json->NODE_2_PORT_2[] = $temp;
 		}
 		elseif($record->portId == 3)
 		{
-			$temp = array($record->utc * 1000, $record->attenuation);
+			$temp = array($record->utc * 1000, $record->attenuation - $calibration);
 			$json->NODE_2_PORT_3[] = $temp;
 		}
 	}

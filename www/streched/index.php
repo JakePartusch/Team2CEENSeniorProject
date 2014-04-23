@@ -38,22 +38,28 @@
 					<div class="post-title" style="margin-bottom:2%">				
 						<h2 class="title"><a href="blog-single.html">Project Shield</a></h2>
 					</div><!--END POST-TITLE-->
-					
-					<div class="btn-group">
-							<button class="btn btn-danger" id="submit">Stop Test</button>
-						  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-							Filter
-							<span class="caret"></span>
-						  </a>
-						  <ul class="dropdown-menu">
-								<li><a href="#" id ="day" >Day</a></li>
-								<li><a href="#week" id ="week">Week</a></li>
-								<li><a href="#month" id ="month">Month</a></li>
-								<li><a href="#year" id ="year">Year</a></li>
-								<li><a href="#all" id ="all">All-Time</a></li>
-								<li><a href="" id ="clear">Clear Filter</a></li>
-						  </ul>
-					</div>
+						
+						<div class="btn-group">
+							<button class="btn btn-danger btn-lg" id="submit">Stop Test</button>
+							  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+								Filter
+								<span class="caret"></span>
+							  </a>
+							  <ul class="dropdown-menu">
+									<li><a href="#" id ="day" >Day</a></li>
+									<li><a href="#week" id ="week">Week</a></li>
+									<li><a href="#month" id ="month">Month</a></li>
+									<li><a href="#year" id ="year">Year</a></li>
+									<li><a href="#all" id ="all">All-Time</a></li>
+									<li><a href="" id ="clear">Clear Filter</a></li>
+							  </ul>
+						</div>
+						<form style="padding-top:1%"class="form-inline" role="form">
+						  <div class="form-group">
+							<input style="width:8%"type="text" class="form-control" id="calibration" placeholder="Calibration">
+							<button class="btn btn-default " id="calibrationButton">Update</button>
+						  </div>
+						 </form>
 					
 				</div><!--END POST-CONTENT -->
 				<div id="container" style="min-width: 310px; height: 100%; margin: 0 auto"></div>
@@ -63,7 +69,7 @@
 <!-- END BLOG -->
 </div><!--END WRAPPER--> 
 </body>
-<script src="http://code.jquery.com/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="javascript/custom.js"></script>
 <script type="text/javascript" src="javascript/header.js"></script>
 
@@ -154,6 +160,14 @@ $(function () {
 			chart = new Highcharts.Chart(options);
 		});
     });
+$.ajax({
+	  type: "GET",
+	  url: "calibration.php",
+	  async: true,
+	  success: function (data) {
+			$("#calibration").val(data);
+		}
+	});
 	
 function getUrlParameters(parameter, staticURL, decode){
    /*
@@ -180,7 +194,7 @@ function getUrlParameters(parameter, staticURL, decode){
 }	
 $("#submit").click( function() {
 		var startTimestamp = getUrlParameters("id", "", true);
-		var data = {id:startTimestamp}
+		var data = {id:startTimestamp};
 		$.ajax({
 		  type: "POST",
 		  url: "addExpirationDate.php",
@@ -193,6 +207,17 @@ $("#submit").click( function() {
 		});
 		return false;
 	});
+
+$("#calibrationButton").click( function() {
+		var data = {calibration:$("#calibration").val()};
+		$.ajax({
+		  type: "POST",
+		  url: "calibration.php",
+		  data: data,
+		  async: true,
+		});
+	return false;
+});
 $("#day").click( function() {
 		getDataURL = "getData.php?" + encodedStartTmst + "&" + encodedEndTmst + "&day=true" ;
 		return true;
