@@ -8,7 +8,7 @@ if(empty($_POST["id"])) {
 }
 else {
 	date_default_timezone_set('America/Mexico_City');
-	$date = date('Y-m-d h:i:s');
+	$date = date('Y-m-d H:i:s');
 	$mysqli = new mysqli("localhost", "jpartusch", "password", "mysql");
 	/* check connection */
 	if ($mysqli->connect_errno) 
@@ -31,6 +31,6 @@ else {
 		$test->startTmst = $record[2];
 		$test->endTmst = $record[3];
 	}
-	echo "http://localhost/index.php?" . http_build_query($test);
+	echo "/index.php?" . http_build_query($test);
 }
 ?>

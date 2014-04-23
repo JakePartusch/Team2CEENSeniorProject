@@ -12,6 +12,7 @@
 <link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css' />
 
 
+
 </head>
 
 <body id="top">					
@@ -65,6 +66,7 @@
 <script src="http://code.jquery.com/jquery.js"></script>
 <script type="text/javascript" src="javascript/custom.js"></script>
 <script type="text/javascript" src="javascript/header.js"></script>
+
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
  <script type="text/javascript">
 var chart;
@@ -107,13 +109,19 @@ $(function () {
             xAxis: {
                 type: 'datetime',
                 dateTimeLabelFormats: { // don't display the dummy year
-                    month: '%e. %b',
-                    year: '%b'
+                    millisecond: '%m/%e %H:%M:%S',
+					second: '%m/%e %H:%M:%S',
+					minute: '%m/%e %H:%M:%S',
+					hour: '%m/%e %H:%M',
+					day: '%m/%e',
+					week: '%m/%e',
+					month: '%m/%e',
+					year: '%m/%e'
                 }
             },
             yAxis: {
                 title: {
-                    text: 'Attenuation (dbm)'
+                    text: 'Attenuation (DB)'
                 }
             },
             tooltip: {

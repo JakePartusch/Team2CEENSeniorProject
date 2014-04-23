@@ -5,7 +5,7 @@ spl_autoload_register ();
 
 $utils = new utils();
 date_default_timezone_set('America/Mexico_City');
-$date = date('Y-m-d h:i:s');
+$date = date('Y-m-d H:i:s');
 if(empty($_GET[day]) && empty($_GET[week]) && empty($_GET[month]) && empty($_GET[year]) && empty($_GET[all])) {
 	 if(empty($_GET[startTmst])) {
 		$query = "SELECT * FROM `attenuationdata`";
@@ -22,22 +22,22 @@ if(empty($_GET[day]) && empty($_GET[week]) && empty($_GET[month]) && empty($_GET
 else {
 	if(!empty($_GET[day])) {
 		$time = strtotime("-1 day");
-		$date = date('Y-m-d h:i:s', $time);
+		$date = date('Y-m-d H:i:s', $time);
 		$query = "SELECT * FROM `attenuationdata` WHERE TIMESTAMP > '$date'";
 	}
 	else if(!empty($_GET[week])) {
 		$time = strtotime("-1 week");
-		$date = date('Y-m-d h:i:s', $time);
+		$date = date('Y-m-d H:i:s', $time);
 		$query = "SELECT * FROM `attenuationdata` WHERE TIMESTAMP > '$date'";
 	}
 	else if(!empty($_GET[month])) {
 		$time = strtotime("-1 month");
-		$date = date('Y-m-d h:i:s', $time);
+		$date = date('Y-m-d H:i:s', $time);
 		$query = "SELECT * FROM `attenuationdata` WHERE TIMESTAMP > '$date'";
 	}
 	else if(!empty($_GET[year])) {
 		$time = strtotime("-1 year");
-		$date = date('Y-m-d h:i:s', $time);
+		$date = date('Y-m-d H:i:s', $time);
 		$query = "SELECT * FROM `attenuationdata` WHERE TIMESTAMP > '$date'";
 	}
 	else if(!empty($_GET[all])) {
@@ -53,17 +53,17 @@ foreach($allRecords as $record)
 	{
 		if($record->portId == 1)
 		{
-			$temp = array($record->utc, $record->attenuation);
+			$temp = array($record->utc * 1000, $record->attenuation);
 			$json->NODE_1_PORT_1[] = $temp;
 		}
 		elseif($record->portId == 2)
 		{
-			$temp = array($record->utc, $record->attenuation);
+			$temp = array($record->utc * 1000, $record->attenuation);
 			$json->NODE_1_PORT_2[] = $temp;
 		}
 		elseif($record->portId == 3)
 		{
-			$temp = array($record->utc, $record->attenuation);
+			$temp = array($record->utc * 1000, $record->attenuation);
 			$json->NODE_1_PORT_3[] = $temp;
 		}
 	}
@@ -71,17 +71,17 @@ foreach($allRecords as $record)
 	{
 		if($record->portId == 1)
 		{
-			$temp = array($record->utc, $record->attenuation);
+			$temp = array($record->utc * 1000, $record->attenuation);
 			$json->NODE_2_PORT_1[] = $temp;
 		}
 		elseif($record->portId == 2)
 		{
-			$temp = array($record->utc, $record->attenuation);
+			$temp = array($record->utc * 1000, $record->attenuation);
 			$json->NODE_2_PORT_2[] = $temp;
 		}
 		elseif($record->portId == 3)
 		{
-			$temp = array($record->utc, $record->attenuation);
+			$temp = array($record->utc * 1000, $record->attenuation);
 			$json->NODE_2_PORT_3[] = $temp;
 		}
 	}
