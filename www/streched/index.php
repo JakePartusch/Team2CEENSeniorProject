@@ -9,9 +9,6 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link rel="stylesheet" type="text/css" href="css/style.css" media="screen" />
 <link rel="stylesheet" type="text/css" href="css/blog.css" media="screen" />
-<link href='http://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css' />
-
-
 
 </head>
 
@@ -36,7 +33,7 @@
 				</div><!--END POST-INFO-->		
 				<div class="post-content">	
 					<div class="post-title" style="margin-bottom:2%">				
-						<h2 class="title"><a href="blog-single.html">Project Shield</a></h2>
+						<h2 class="title" style ="font-family: 'Oswald', sans-serif;color: #676767;font-weight: 700; text-transform: uppercase; word-spacing: 5px; padding-top:1%">Project Shield</h2>
 					</div><!--END POST-TITLE-->
 						
 						<div class="btn-group">
@@ -73,7 +70,7 @@
 <script type="text/javascript" src="javascript/custom.js"></script>
 <script type="text/javascript" src="javascript/header.js"></script>
 
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" src="js/jsapi.js"></script>
  <script type="text/javascript">
 var chart;
 var startTimestamp = getUrlParameters("startTmst", "", true);
