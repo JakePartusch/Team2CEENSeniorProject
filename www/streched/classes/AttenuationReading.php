@@ -3,7 +3,7 @@ class AttenuationReading {
 
 public $attenuation;
 public $utc;
-public $receiverId;
-public $frequency;
+public $nodeId;
+public $portId;
 }
 ?>
